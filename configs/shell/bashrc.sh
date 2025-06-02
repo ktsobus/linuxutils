@@ -15,12 +15,15 @@ bind "set completion-ignore-case on"
 bind "set show-all-if-ambiguous on"
 
 
-# Bash configuration - loads all common shell configs
-# Source all scripts from common/ subdirectory
+# Source all scripts from common/ subdirectory (except shell-specific ones)
 if [[ -d "$SCRIPT_DIR/common" ]]; then
     for script in "$SCRIPT_DIR/common"/*.sh; do
         if [[ -f "$script" ]]; then
-            source "$script"
+            script_name=$(basename "$script")
+            # Skip bash_ and zsh_ prefixed files (handled separately)
+            if [[ ! "$script_name" =~ ^(bash_|zsh_) ]]; then
+                source "$script"
+            fi
         fi
     done
 fi
