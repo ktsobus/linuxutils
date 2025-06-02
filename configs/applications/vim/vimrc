@@ -1,0 +1,26 @@
+" Essential Vim Configuration
+
+" Basic settings
+set number              " Show line numbers
+set expandtab           " Use spaces instead of tabs
+set autoindent          " Auto-indent new lines
+
+" Search settings
+set ignorecase          " Case insensitive search
+set smartcase           " Case sensitive if uppercase used
+set hlsearch            " Highlight search results
+set incsearch           " Incremental search
+
+" General improvements
+set mouse=a             " Enable mouse support
+set clipboard=unnamedplus " Use system clipboard
+set backspace=indent,eol,start " Better backspace behavior
+
+" Appearance
+syntax on               " Enable syntax highlighting
+set background=dark     " Dark background
+colorscheme default     " Use default colorscheme
+
+" Status line
+set laststatus=2        " Always show status line
+set ruler               " Show cursor position
