@@ -17,13 +17,15 @@ print_error() {
 
 print_status "Setting up Vim configuration..."
 
+# Create backup directory
+BACKUP_DIR="$HOME/.vim/backups"
+mkdir -p "$BACKUP_DIR"
+
 # Backup existing vimrc
 if [[ -f "$HOME/.vimrc" ]]; then
-    if [ ! -d "$HOME/.vimrc-backup" ]; then
-            mkdir "$HOME/.vimrc-backup"
-    fi
-    cp "$HOME/.vimrc" "$HOME/.vimrc-backup/$(date +%Y%m%d_%H%M%S)"
-    print_warning "Backed up existing .vimrc"
+    backup_file="$BACKUP_DIR/vimrc.backup.$(date +%Y%m%d_%H%M%S)"
+    cp "$HOME/.vimrc" "$backup_file"
+    print_warning "Backed up existing .vimrc to $backup_file"
 fi
 
 # Install vim-plug if not already installed
@@ -52,9 +54,14 @@ fi
 
 # Create combined vimrc with plugins
 if [[ -f "$SCRIPT_DIR/vim/plugins.vim" ]]; then
-    # Append plugins configuration to vimrc
-    cat "$SCRIPT_DIR/vim/plugins.vim" >> "$HOME/.vimrc"
-    print_status "Added plugins configuration to vimrc"
+    # Check if plugins are already added to avoid duplicates
+    if ! grep -q "call plug#begin" "$HOME/.vimrc"; then
+        # Append plugins configuration to vimrc
+        cat "$SCRIPT_DIR/vim/plugins.vim" >> "$HOME/.vimrc"
+        print_status "Added plugins configuration to vimrc"
+    else
+        print_status "Plugins already configured in vimrc"
+    fi
 else
     print_warning "plugins.vim not found, skipping plugin setup"
 fi
