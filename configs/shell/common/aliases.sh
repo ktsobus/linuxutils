@@ -3,6 +3,8 @@
 
 #Basics
 alias cls='clear'
+alias lu-dependencies='source linuxutils/dependencies/init.sh'
+alias lu-configs='source linuxutils/configs/init.sh'
 
 # Navigation
 alias ..='cd ..'
