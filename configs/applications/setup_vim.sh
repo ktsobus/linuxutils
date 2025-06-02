@@ -19,7 +19,10 @@ print_status "Setting up Vim configuration..."
 
 # Backup existing vimrc
 if [[ -f "$HOME/.vimrc" ]]; then
-    cp "$HOME/.vimrc" "$HOME/.vimrc.backup.$(date +%Y%m%d_%H%M%S)"
+    if [ ! -d "$HOME/.vimrc-backup" ]; then
+            mkdir "$HOME/.vimrc-backup"
+    fi
+    cp "$HOME/.vimrc" "$HOME/.vimrc-backup/$(date +%Y%m%d_%H%M%S)"
     print_warning "Backed up existing .vimrc"
 fi
 
