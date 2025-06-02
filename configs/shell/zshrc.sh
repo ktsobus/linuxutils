@@ -4,8 +4,25 @@
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Source common configurations
-source "$SCRIPT_DIR/aliases.sh"
+# Source all scripts from common/ subdirectory
+if [[ -d "$SCRIPT_DIR/common" ]]; then
+    for script in "$SCRIPT_DIR/common"/*.sh; do
+        if [[ -f "$script" ]]; then
+            source "$script"
+        fi
+    done
+fi
+
+# Source zsh-specific scripts from common/ subdirectory
+if [[ -d "$SCRIPT_DIR/common" ]]; then
+    for script in "$SCRIPT_DIR/common"/zsh_*.sh; do
+        if [[ -f "$script" ]]; then
+            source "$script"
+        fi
+    done
+fi
+
+
 
 # Zsh-specific settings
 # Enable auto-completion
