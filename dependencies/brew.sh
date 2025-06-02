@@ -4,6 +4,8 @@
 BREW_PACKAGES=(
     "fzf"
     "bat"
+    "jandedobbeleer/oh-my-posh/oh-my-posh"
+    "jesseduffield/lazygit/lazygit"
 )
 
 # Homebrew casks to install (GUI applications)

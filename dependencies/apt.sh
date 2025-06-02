@@ -5,6 +5,7 @@ APT_PACKAGES=(
     "git"
     "tree"
     "build-essential"
+    "zsh"
 )
 
 # Function to install APT packages
