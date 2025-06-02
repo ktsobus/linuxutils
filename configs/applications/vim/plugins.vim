@@ -10,6 +10,16 @@ Plug 'preservim/nerdtree'
 " Git integration
 Plug 'tpope/vim-fugitive'
 
+" Statuss line
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+" Syntax checking
+Plug 'scrooloose/syntastic'
+
+" Autocomplete
+Plug 'neoclide/coc.nvim'
+
 call plug#end()
 
 " Plugin configurations

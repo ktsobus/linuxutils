@@ -2,8 +2,11 @@
 
 " Basic settings
 set number              " Show line numbers
+set relativenumber
 set expandtab           " Use spaces instead of tabs
 set autoindent          " Auto-indent new lines
+set ls=2
+set tabstop=4
 
 " Search settings
 set ignorecase          " Case insensitive search
@@ -12,7 +15,6 @@ set hlsearch            " Highlight search results
 set incsearch           " Incremental search
 
 " General improvements
-set mouse=a             " Enable mouse support
 set clipboard=unnamedplus " Use system clipboard
 set backspace=indent,eol,start " Better backspace behavior
 
@@ -24,6 +26,49 @@ colorscheme default     " Use default colorscheme
 " Status line
 set laststatus=2        " Always show status line
 set ruler               " Show cursor position
+
+" Syntax check config
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Coc config
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" coc color config
+highlight Pmenu      ctermbg=236 ctermfg=252
+highlight PmenuSel   ctermbg=39  ctermfg=16
+highlight PmenuSbar  ctermbg=238
+highlight PmenuThumb ctermbg=39
+highlight CocMenuSel ctermbg=129 ctermfg=16
+
+
+
+" Source Plugins
+source ~/.vim/plugins.vim
 " Essential Vim Plugins
 " This file lists plugins to install with vim-plug
 
@@ -36,221 +81,15 @@ Plug 'preservim/nerdtree'
 " Git integration
 Plug 'tpope/vim-fugitive'
 
-call plug#end()
+" Statuss line
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
+" Syntax checking
+Plug 'scrooloose/syntastic'
 
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
-
-call plug#end()
-
-" Plugin configurations
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeShowHidden=1
-" Essential Vim Plugins
-" This file lists plugins to install with vim-plug
-
-" Plugin list
-call plug#begin('~/.vim/plugged')
-
-" File explorer
-Plug 'preservim/nerdtree'
-
-" Git integration
-Plug 'tpope/vim-fugitive'
+" Autocomplete
+Plug 'neoclide/coc.nvim'
 
 call plug#end()
 
