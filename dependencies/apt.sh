@@ -6,6 +6,9 @@ APT_PACKAGES=(
     "tree"
     "build-essential"
     "zsh"
+    "neofetch"
+    "cowsay"
+    "ansiweather"
 )
 
 # Function to install APT packages
