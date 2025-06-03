@@ -44,6 +44,47 @@ else
     print_warning "apt.sh not found in $SCRIPT_DIR"
 fi
 
+# Check if Node.js is installed
+if command -v node &> /dev/null; then
+    print_status "Node.js found: $(node --version)"
+else
+    print_warning "Node.js not found. Installing via NVM..."
+    
+    # Check if NVM is already installed
+    if [[ ! -f "$HOME/.nvm/nvm.sh" ]]; then
+        print_status "Installing NVM..."
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+        
+        # Source NVM for current session
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+        
+        if command -v nvm &> /dev/null; then
+            print_status "NVM installed successfully"
+        else
+            print_error "NVM installation failed"
+        fi
+    else
+        print_status "NVM already installed, loading..."
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    fi
+    
+    # Install Node.js 22 with NVM
+    if command -v nvm &> /dev/null; then
+        print_status "Installing Node.js 22..."
+        nvm install 22
+        nvm use 22
+        nvm alias default 22
+        print_status "Node.js installed: $(node --version)"
+        print_warning "Note: You may need to restart your terminal or source your shell config"
+        print_warning "NVM commands will be available after restarting your shell"
+    else
+        print_error "NVM not available, cannot install Node.js"
+    fi
+fi
+
 # Check if brew is installed
 if command -v brew &> /dev/null; then
     print_status "Homebrew found. Updating and upgrading brew packages..."
@@ -93,5 +134,8 @@ print_status "All operations completed!"
 print_status "Summary:"
 print_status "- System packages updated via APT"
 print_status "- Custom APT packages installed from apt.sh"
+if command -v node &> /dev/null; then
+    print_status "- Node.js available: $(node --version)"
+fi
 print_status "- Homebrew updated/installed"
 print_status "- Custom Homebrew packages installed from brew.sh"
