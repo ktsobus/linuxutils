@@ -10,8 +10,9 @@ alias v='vim'
 
 # Navigation
 alias ..='cd ..'
-alias ll='ls -alF'
+alias ll='g --icon --long --sort=name --sh'
 alias la='ls -A'
+alias ls='g --icon --sort=name'
 alias f='fzf'
 
 # Git shortcuts
