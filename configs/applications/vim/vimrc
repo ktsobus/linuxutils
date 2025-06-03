@@ -7,6 +7,7 @@ set expandtab           " Use spaces instead of tabs
 set autoindent          " Auto-indent new lines
 set ls=2
 set tabstop=4
+filetype plugin indent on
 
 " Search settings
 set ignorecase          " Case insensitive search
@@ -90,6 +91,7 @@ Plug 'scrooloose/syntastic'
 
 " Autocomplete
 Plug 'neoclide/coc.nvim'
+Plug 'https://github.com/josa42/coc-sh.git'
 
 call plug#end()
 
