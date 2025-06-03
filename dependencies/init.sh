@@ -85,6 +85,24 @@ else
     fi
 fi
 
+# Check if SDKMAN is installed
+if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
+    print_status "SDKMAN found"
+else
+    print_warning "SDKMAN not found. Installing SDKMAN..."
+    curl -s "https://get.sdkman.io" | bash
+    
+    # Source SDKMAN for current session
+    if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        print_status "SDKMAN installed successfully"
+        print_warning "Note: SDKMAN will be available after restarting your terminal"
+        print_warning "You can then install Java with: sdk install java"
+    else
+        print_error "SDKMAN installation may have failed"
+    fi
+fi
+
 # Check if brew is installed
 if command -v brew &> /dev/null; then
     print_status "Homebrew found. Updating and upgrading brew packages..."
@@ -136,6 +154,9 @@ print_status "- System packages updated via APT"
 print_status "- Custom APT packages installed from apt.sh"
 if command -v node &> /dev/null; then
     print_status "- Node.js available: $(node --version)"
+fi
+if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
+    print_status "- SDKMAN installed and available"
 fi
 print_status "- Homebrew updated/installed"
 print_status "- Custom Homebrew packages installed from brew.sh"
