@@ -12,8 +12,10 @@ alias v='vim'
 alias ..='cd ..'
 alias ll='ls -alF'
 alias la='ls -A'
+alias f='fzf'
 
 # Git shortcuts
 alias gs='git status'
 alias ga='git add'
 alias lg='lazygit'
+
