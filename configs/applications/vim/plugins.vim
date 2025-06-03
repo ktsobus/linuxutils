@@ -19,6 +19,7 @@ Plug 'scrooloose/syntastic'
 
 " Autocomplete
 Plug 'neoclide/coc.nvim'
+Plug 'https://github.com/josa42/coc-sh.git'
 
 call plug#end()
 
