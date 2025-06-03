@@ -9,6 +9,12 @@ APT_PACKAGES=(
     "neofetch"
     "cowsay"
     "ansiweather"
+    "zip"
+    "unzip"
+    "htop"
+    "tar"
+    "gzip"
+    "btop"
 )
 
 # Function to install APT packages
