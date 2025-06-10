@@ -52,16 +52,11 @@ else
     return 1
 fi
 
-# Create combined vimrc with plugins
+# Link plugins configuration (so it's always up to date)
 if [[ -f "$SCRIPT_DIR/vim/plugins.vim" ]]; then
-    # Check if plugins are already added to avoid duplicates
-    if ! grep -q "call plug#begin" "$HOME/.vimrc"; then
-        # Append plugins configuration to vimrc
-        cat "$SCRIPT_DIR/vim/plugins.vim" >> "$HOME/.vimrc"
-        print_status "Added plugins configuration to vimrc"
-    else
-        print_status "Plugins already configured in vimrc"
-    fi
+    mkdir -p "$HOME/.vim"
+    ln -sf "$SCRIPT_DIR/vim/plugins.vim" "$HOME/.vim/plugins.vim"
+    print_status "Linked vim plugins configuration"
 else
     print_warning "plugins.vim not found, skipping plugin setup"
 fi
