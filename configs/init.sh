@@ -40,11 +40,33 @@ add_source_line() {
         return 0
     fi
     
-    # Add source line
-    echo "" >> "$config_file"
-    echo "# Source personal $shell_name configuration" >> "$config_file"
-    echo "$source_line" >> "$config_file"
-    print_status "Added $shell_name configuration to $config_file"
+    # Check if SDKMAN lines exist and move them to the end
+    if grep -q "SDKMAN" "$config_file"; then
+        print_status "Moving SDKMAN configuration to end of $config_file"
+        
+        # Extract SDKMAN lines
+        sdkman_lines=$(grep -A1 -B1 "SDKMAN" "$config_file")
+        
+        # Remove SDKMAN lines from file
+        sed -i '/SDKMAN/d' "$config_file"
+        sed -i '/sdkman-init.sh/d' "$config_file"
+        
+        # Add personal source line
+        echo "" >> "$config_file"
+        echo "# Source personal $shell_name configuration" >> "$config_file"
+        echo "$source_line" >> "$config_file"
+        
+        # Re-add SDKMAN lines at the end
+        echo "" >> "$config_file"
+        echo "#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!" >> "$config_file"
+        echo "export SDKMAN_DIR=\"\$HOME/.sdkman\"" >> "$config_file"
+        echo "[[ -s \"\$HOME/.sdkman/bin/sdkman-init.sh\" ]] && source \"\$HOME/.sdkman/bin/sdkman-init.sh\"" >> "$config_file"
+    else
+        # Add source line normally
+        echo "" >> "$config_file"
+        echo "# Source personal $shell_name configuration" >> "$config_file"
+        echo "$source_line" >> "$config_file"
+    fi
 }
 
 # Setup Bash
