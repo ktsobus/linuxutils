@@ -3,9 +3,9 @@
 
 #Basics
 alias cls='clear'
-alias lu-dependencies='source linuxutils/dependencies/init.sh'
-alias lu-configs='source linuxutils/configs/init.sh'
-alias lu-functions='source linuxutils/functions/init.sh'
+alias lu-dependencies='source ~/linuxutils/dependencies/init.sh'
+alias lu-configs='source ~/linuxutils/configs/init.sh'
+alias lu-functions='source ~/linuxutils/functions/init.sh'
 alias v='vim'
 
 # Navigation
