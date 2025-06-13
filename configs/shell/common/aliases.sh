@@ -1,7 +1,6 @@
 #!/bin/bash
 # Common aliases for all shells - essentials only
 
-echo "lu alias file"
 
 #Basics
 alias cls='clear'
