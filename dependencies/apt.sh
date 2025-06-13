@@ -15,6 +15,7 @@ APT_PACKAGES=(
     "tar"
     "gzip"
     "btop"
+    "ripgrep"
 )
 
 # Function to install APT packages
