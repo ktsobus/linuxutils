@@ -16,6 +16,7 @@ APT_PACKAGES=(
     "gzip"
     "btop"
     "ripgrep"
+    "traceroute"
 )
 
 # Function to install APT packages
