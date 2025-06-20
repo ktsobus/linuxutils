@@ -3,6 +3,11 @@
 # eval brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+#eval oh my posh
+if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+  eval "$(oh-my-posh init zsh --config ~/linuxutils/configs/shell/ohmyposh/custom-zash.omp.json)"
+fi
+
 #eval nvm
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
