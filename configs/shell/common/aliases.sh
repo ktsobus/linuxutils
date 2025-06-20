@@ -14,8 +14,8 @@ alias ..='cd ..'
 alias ll='g --icon --long --sort=name --sh'
 alias la='ls -A'
 alias ls='g --icon --sort=name'
-alias f='fzf'
-alias fg='fuzzygrep'
+#alias f='fzf'
+alias f='fuzzygrep'
 
 # Git shortcuts
 alias gs='git status'
