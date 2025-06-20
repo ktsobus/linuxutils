@@ -8,9 +8,9 @@
           "type": "shell",
           "style": "plain",
           "foreground": "#FFD700",
-          "template": "{{ .Name }}", 
+          "template": "{{ .Name }}",
           "properties": {
-            "display_version": false 
+            "display_version": false
           }
         },
         {
@@ -41,6 +41,12 @@
           },
           "style": "plain",
           "template": " <#DDB15F>git(</>{{ .HEAD }}<#DDB15F>)</>",
+          "type": "git"
+        },
+        {
+          "foreground": "#FFD700",
+          "style": "plain",
+          "template": "{{ if gt .Ahead 0 }} \u2B06{{ .Ahead }}{{ end }}{{ if gt .Behind 0 }} \u2B07{{ .Behind }}{{ end }}{{ if and (eq .Ahead 0) (eq .Behind 0) }} \u2714{{ end }}",
           "type": "git"
         },
         {
