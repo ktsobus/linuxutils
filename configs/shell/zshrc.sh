@@ -22,6 +22,7 @@ compinit
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
+
 # Where the history file is stored
 HISTFILE=~/.zsh_history
 
