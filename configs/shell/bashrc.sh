@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 #eval brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 #eval oh my posh
-eval "$(oh-my-posh init bash --config $(brew --prefix oh-my-posh)/themes/zash.omp.json)"
+eval "$(oh-my-posh init bash --config ~/linuxutils/configs/shell/ohmyposh/custom-zash.omp.json)"
 
 # Case-insensitive tab completion
 bind "set completion-ignore-case on"
