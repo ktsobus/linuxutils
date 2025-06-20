@@ -44,6 +44,34 @@ else
     print_warning "apt.sh not found in $SCRIPT_DIR"
 fi
 
+
+print_status "Refreshing snap packages..."
+sudo snap refresh
+
+print_status "Removing unused snap revisions..."
+sudo snap set system refresh.retain=2
+
+# Find disabled snaps and remove them if any exist
+DISABLED_SNAPS=$(snap list --all | awk '/disabled/{print $1, $2}')
+if [[ -n "$DISABLED_SNAPS" ]]; then
+    while read -r snapname version; do
+        sudo snap remove --purge "$snapname" --revision="$version"
+    done <<< "$DISABLED_SNAPS"
+else
+    print_status "No unused snap revisions to remove."
+fi
+
+# Source and run snap dependencies
+if [[ -f "$SCRIPT_DIR/snap.sh" ]]; then
+    print_status "Loading SNAP dependencies..."
+    source "$SCRIPT_DIR/snap.sh"
+    install_snap_packages "${SNAP_PACKAGES[@]}"
+else
+    print_warning "snap.sh not found in $SCRIPT_DIR"
+fi
+
+
+
 # Check if Node.js is installed
 if command -v node &> /dev/null; then
     print_status "Node.js found: $(node --version)"
