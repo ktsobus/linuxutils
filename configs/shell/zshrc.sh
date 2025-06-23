@@ -1,27 +1,41 @@
-# Zsh configuration - loads all common shell configs
-
-# eval brew
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-#eval oh my posh
-if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-  eval "$(oh-my-posh init zsh --config ~/linuxutils/configs/shell/ohmyposh/custom-zash.omp.json)"
-fi
-
-#eval nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
+# Zsh configuration - loads Oh My Zsh first, then all common shell configs
 
 # Get the directory where this script is located (zsh-safe!)
 SCRIPT_DIR="${0:A:h}"
+
+# Load Oh My Zsh if available (before other configurations)
+if [[ -d "$HOME/.oh-my-zsh" ]]; then
+    # Set Oh My Zsh path
+    export ZSH="$HOME/.oh-my-zsh"
+    
+    # Set theme to a minimal one that won't conflict with oh-my-posh
+    ZSH_THEME=""
+    
+    # Disable Oh My Zsh's prompt override to let oh-my-posh handle it
+    DISABLE_AUTO_TITLE="true"
+    
+    # Build plugins array with only available plugins
+    plugins=(git colorize colored-man-pages compleat emoji ssh you-should-use zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting)
+    
+    # Source Oh My Zsh
+    if [[ -f "$ZSH/oh-my-zsh.sh" ]]; then
+        source "$ZSH/oh-my-zsh.sh"
+    fi
+fi
+
+# eval brew (after Oh My Zsh to ensure proper PATH)
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+#eval oh my posh (after Oh My Zsh to override prompt)
+if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+  eval "$(oh-my-posh init zsh --config ~/linuxutils/configs/shell/ohmyposh/custom-zash.omp.json)"
+fi
 
 # Zsh-specific settings
 autoload -U compinit
 compinit
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-
 
 # Where the history file is stored
 HISTFILE=~/.zsh_history
@@ -66,3 +80,14 @@ if [[ -d "$SCRIPT_DIR/common" ]]; then
     unsetopt null_glob
 fi
 
+# unload g alias bc of g-ls
+unalias g
+
+
+#eval nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

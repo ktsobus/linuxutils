@@ -34,6 +34,44 @@ add_source_line() {
     # Create config file if it doesn't exist
     touch "$config_file"
     
+    # Special handling for zsh and Oh My Zsh
+    if [[ "$shell_name" == "zsh" ]] && [[ -d "$HOME/.oh-my-zsh" ]]; then
+        # If Oh My Zsh is installed, we need to replace the default .zshrc
+        # but preserve any existing SDKMAN configuration
+        
+        # Check if SDKMAN lines exist and extract them
+        local sdkman_lines=""
+        if grep -q "SDKMAN" "$config_file"; then
+            print_status "Preserving SDKMAN configuration from existing .zshrc"
+            sdkman_lines=$(grep -A1 -B1 "SDKMAN\|sdkman-init.sh" "$config_file")
+        fi
+        
+        # Check if our configuration is already sourced
+        if grep -Fq "$source_line" "$config_file"; then
+            print_warning "$shell_name configuration already sourced in $config_file"
+            return 0
+        fi
+        
+        # Create a new .zshrc that sources our configuration and preserves SDKMAN
+        cat > "$config_file" << EOF
+# Source personal zsh configuration (includes Oh My Zsh integration)
+$source_line
+
+EOF
+        
+        # Re-add SDKMAN lines at the end if they existed
+        if [[ -n "$sdkman_lines" ]]; then
+            echo "" >> "$config_file"
+            echo "#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!" >> "$config_file"
+            echo "export SDKMAN_DIR=\"\$HOME/.sdkman\"" >> "$config_file"
+            echo "[[ -s \"\$HOME/.sdkman/bin/sdkman-init.sh\" ]] && source \"\$HOME/.sdkman/bin/sdkman-init.sh\"" >> "$config_file"
+        fi
+        
+        print_status "Zsh configuration updated to work with Oh My Zsh and preserve SDKMAN"
+        return 0
+    fi
+    
+    # Regular handling for bash or zsh without Oh My Zsh
     # Check if already sourced
     if grep -Fq "$source_line" "$config_file"; then
         print_warning "$shell_name configuration already sourced in $config_file"
@@ -100,4 +138,4 @@ for setup_script in "$SCRIPT_DIR/applications/setup_"*.sh; do
 done
 
 print_status "All configurations setup completed!"
-print_warning "Please restart your terminal or run 'source ~/.bashrc' to apply changes"
+print_warning "Please restart your terminal or run 'source ~/.bashrc' / 'source ~/.zshrc' to apply changes"

@@ -70,7 +70,78 @@ else
     print_warning "snap.sh not found in $SCRIPT_DIR"
 fi
 
+# Check if Oh My Zsh is installed (only if zsh is available)
+if command -v zsh &> /dev/null; then
+    if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+        print_status "Installing Oh My Zsh..."
+        # Install Oh My Zsh without changing shell automatically
+        RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        
+        if [[ -d "$HOME/.oh-my-zsh" ]]; then
+            print_status "Oh My Zsh installed successfully"
+        else
+            print_error "Oh My Zsh installation may have failed"
+        fi
+    else
+        print_status "Oh My Zsh already installed, checking for updates..."
+        # Update Oh My Zsh using its built-in upgrade mechanism
+        if [[ -f "$HOME/.oh-my-zsh/tools/upgrade.sh" ]]; then
+            # Run the upgrade script in non-interactive mode
+            env ZSH="$HOME/.oh-my-zsh" sh "$HOME/.oh-my-zsh/tools/upgrade.sh" --unattended
+            print_status "Oh My Zsh update completed"
+        else
+            # Fallback: try to pull latest changes manually
+            print_warning "Upgrade script not found, attempting manual update..."
+            cd "$HOME/.oh-my-zsh" && git pull origin master 2>/dev/null && cd - >/dev/null
+            print_status "Oh My Zsh update attempted"
+        fi
+    fi
+    
+    # Install popular Oh My Zsh plugins if Oh My Zsh is available
+    if [[ -d "$HOME/.oh-my-zsh" ]]; then
+        ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+        
+        # Install zsh-autosuggestions
+        if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then
+            print_status "Installing zsh-autosuggestions plugin..."
+            git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+        else
+            print_status "Updating zsh-autosuggestions plugin..."
+            cd "$ZSH_CUSTOM/plugins/zsh-autosuggestions" && git pull origin master 2>/dev/null && cd - >/dev/null
+        fi
+        
+        # Install zsh-syntax-highlighting
+        if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then
+            print_status "Installing zsh-syntax-highlighting plugin..."
+            git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+        else
+            print_status "Updating zsh-syntax-highlighting plugin..."
+            cd "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" && git pull origin master 2>/dev/null && cd - >/dev/null
+        fi
+        
+        # Install fast-syntax-highlighting (alternative to zsh-syntax-highlighting)
+        if [[ ! -d "$ZSH_CUSTOM/plugins/fast-syntax-highlighting" ]]; then
+            print_status "Installing fast-syntax-highlighting plugin..."
+            git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git "$ZSH_CUSTOM/plugins/fast-syntax-highlighting"
+        else
+            print_status "Updating fast-syntax-highlighting plugin..."
+            cd "$ZSH_CUSTOM/plugins/fast-syntax-highlighting" && git pull origin master 2>/dev/null && cd - >/dev/null
+        fi
 
+        # Install you-should-use
+        if [[ ! -d "$ZSH_CUSTOM/plugins/you-should-use" ]]; then
+                print_status "Installing you-should-use"
+                git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$ZSH_CUSTOM/plugins/you-should-use"
+        else
+                print_status "Updating you should use"
+                cd "$ZSH_CUSTOM/plugins/you-should-use" && git pull origin master 2>/dev/null && cd - >/dev/null
+        fi
+        
+        print_status "Oh My Zsh plugins installation/update completed"
+    fi
+else
+    print_warning "Zsh not available, skipping Oh My Zsh installation"
+fi
 
 # Check if Node.js is installed
 if command -v node &> /dev/null; then
@@ -180,6 +251,9 @@ print_status "All operations completed!"
 print_status "Summary:"
 print_status "- System packages updated via APT"
 print_status "- Custom APT packages installed from apt.sh"
+if command -v zsh &> /dev/null && [[ -d "$HOME/.oh-my-zsh" ]]; then
+    print_status "- Oh My Zsh installed and available"
+fi
 if command -v node &> /dev/null; then
     print_status "- Node.js available: $(node --version)"
 fi
