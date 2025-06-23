@@ -83,6 +83,7 @@ fi
 # unload g alias bc of g-ls
 unalias g
 
+unset zle_bracketed_paste
 
 #eval nvm
 export NVM_DIR="$HOME/.nvm"
