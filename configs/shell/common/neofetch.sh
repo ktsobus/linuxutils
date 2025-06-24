@@ -5,6 +5,7 @@ if command -v neofetch >/dev/null 2>&1 && \
     # Detect shell and set color
     if [ -n "$ZSH_VERSION" ]; then
         PINGU_COLOR=$'\033[38;2;255;215;0m'      # Gold for zsh
+        PINGU_COLOR=$'\033[38;2;255;146;176m'      # Pink for zsh
     elif [ -n "$BASH_VERSION" ]; then
         PINGU_COLOR=$'\033[1;36m'                # Cyan for bash
     elif [ -n "$ASH_VERSION" ] || [ -n "$SH_VERSION" ] || [ "$(basename "$SHELL")" = "ash" ]; then
