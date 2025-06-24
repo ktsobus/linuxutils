@@ -21,6 +21,9 @@ Plug 'scrooloose/syntastic'
 Plug 'neoclide/coc.nvim'
 Plug 'https://github.com/josa42/coc-sh.git'
 
+" vim-devicons
+Plug 'ryanoasis/vim-devicons'
+
 call plug#end()
 
 " Plugin configurations
