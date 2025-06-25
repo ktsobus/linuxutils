@@ -17,7 +17,7 @@ if command -v neofetch >/dev/null 2>&1 && \
 
     temp=$(ansiweather -l 'Solothurn, CH' -u metric | grep -oP '\-?\d+ °C')
     neofetch --ascii "$(
-        echo "Solothurn: $temp" | cowsay -f tux -W 27 | \
+        echo "Solothurn: $temp" | cowsay -f flaming-sheep -W 27 | \
         sed "s/^/${PINGU_COLOR}/; s/$/${RESET_COLOR}/"
     )"
 
