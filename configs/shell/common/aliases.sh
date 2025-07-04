@@ -8,6 +8,7 @@ alias lu-dependencies='source ~/linuxutils/dependencies/init.sh'
 alias lu-configs='source ~/linuxutils/configs/init.sh'
 alias lu-functions='source ~/linuxutils/functions/init.sh'
 alias v='vim'
+alias sau='sudo apt update && sudo apt upgrade -y && sudo snap refresh && brew upgrade'
 
 # Navigation
 alias ..='cd ..'
