@@ -1,7 +1,7 @@
 # LinuxUtils
 
 Modulares Setup-System für Ubuntu/WSL Instanzen.
-Beinhaltet [fzf-utils](ssh://git@ssh-gitlab.so.ch:1022/solerbus/fzf-utils.git)
+Beinhaltet [fzf-utils](https://gitlab.so.ch/solerbus/fzf-utils)
 
 ## Quick Start
 
