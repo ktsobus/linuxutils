@@ -30,7 +30,7 @@ fuzzygrep() {
   linecontent=$(sed "${linenr}q;d" "$file")
 
   local column
-  column=$(awk -v IGNORECASE=1 l="$linecontent" -v q="$query" 'BEGIN{print index(l,q)}')
+  column=$(awk -v IGNORECASE=1 -v l="$linecontent" -v q="$query" 'BEGIN{print index(l,q)}')
 
   if [ "$column" -gt 0 ]; then
     ${EDITOR:-vim} +"call cursor($linenr,$column)" "$file"
