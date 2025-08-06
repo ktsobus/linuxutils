@@ -3,7 +3,6 @@
 # Homebrew packages to install
 BREW_PACKAGES=(
     "fzf"
-    "bat"
     "jandedobbeleer/oh-my-posh/oh-my-posh"
     "jesseduffield/lazygit/lazygit"
     "g-ls"

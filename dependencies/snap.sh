@@ -3,6 +3,7 @@
 # SNAP packages to install
 SNAP_PACKAGES=(
     "docker"
+    "bat"
 )
 
 # Function to print status messages
