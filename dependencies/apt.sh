@@ -17,6 +17,7 @@ APT_PACKAGES=(
     "btop"
     "ripgrep"
     "traceroute"
+    "bat"
 )
 
 # Function to install APT packages
