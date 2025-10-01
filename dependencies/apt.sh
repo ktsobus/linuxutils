@@ -18,6 +18,7 @@ APT_PACKAGES=(
     "ripgrep"
     "traceroute"
     "bat"
+    "gdu"
 )
 
 # Function to install APT packages
