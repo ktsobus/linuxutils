@@ -5,6 +5,7 @@ BREW_PACKAGES=(
     "fzf"
     "jandedobbeleer/oh-my-posh/oh-my-posh"
     "jesseduffield/lazygit/lazygit"
+    "jesseduffield/lazydocker/lazydocker"
     "g-ls"
     "asciinema"
     "agg"
