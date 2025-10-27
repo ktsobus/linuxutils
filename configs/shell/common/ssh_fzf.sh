@@ -1,13 +1,13 @@
 # === Config ===
-SSH_FZF_SHORTCUT_ACTIVE=true     # enable/disable the shortcut
-SSH_FZF_SHORTCUT='\es'           # Alt+S (Esc+s). Change if you like.
+SSH_FZF_SHORTCUT_ACTIVE=true # enable/disable the shortcut
+SSH_FZF_SHORTCUT='\es'       # Alt+S (Esc+s). Change if you like.
 
 # --- helper: pick a host with fzf ---
 __ssh_fzf_pick_host() {
-  awk '/^Host / { for (i=2; i<=NF; i++) print $i }' ~/.ssh/config \
-    | grep -v '[*?]' \
-    | sort \
-    | fzf --prompt="SSH to > " --height=75%
+  awk '/^Host / { for (i=2; i<=NF; i++) print $i }' ~/.ssh/config |
+    grep -v '[*?]' |
+    sort |
+    fzf --prompt="SSH to > " --height=75%
 }
 
 # --- ssh wrapper ---
@@ -36,10 +36,11 @@ if [ "$SSH_FZF_SHORTCUT_ACTIVE" = true ]; then
       local host
       host=$(__ssh_fzf_pick_host) || return
       [ -z "$host" ] && return
-      zle -I                 # flush pending input/output
-      LBUFFER=""; RBUFFER="" # clear current line
-      BUFFER="ssh $host"     # place the command on the line
-      zle accept-line        # run it as if you pressed Enter
+      zle -I # flush pending input/output
+      LBUFFER=""
+      RBUFFER=""         # clear current line
+      BUFFER="ssh $host" # place the command on the line
+      zle accept-line    # run it as if you pressed Enter
     }
     zle -N _ssh_fzf_widget
     bindkey "$SSH_FZF_SHORTCUT" _ssh_fzf_widget
@@ -48,4 +49,3 @@ if [ "$SSH_FZF_SHORTCUT_ACTIVE" = true ]; then
     bind -x '"'"$SSH_FZF_SHORTCUT"'":"ssh"'
   fi
 fi
-

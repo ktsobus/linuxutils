@@ -5,11 +5,11 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # --- Detect Shell ---
 if [[ -n "$ZSH_VERSION" ]]; then
-    IS_ZSH=true
-    source <(fzf --zsh)
+  IS_ZSH=true
+  source <(fzf --zsh)
 else
-    IS_ZSH=false
-    eval "$(fzf --bash)"
+  IS_ZSH=false
+  eval "$(fzf --bash)"
 fi
 
 # Dynamische Label-Bindings für alle Widgets
@@ -85,9 +85,9 @@ fzf-open-file-widget() {
   local selected_file
   local find_files_cmd
 
-  if command -v fd &> /dev/null; then
+  if command -v fd &>/dev/null; then
     find_files_cmd="fd --type f --hidden --follow --exclude .git ."
-  elif command -v fdfind &> /dev/null; then
+  elif command -v fdfind &>/dev/null; then
     find_files_cmd="fdfind --type f --hidden --follow --exclude .git ."
   else
     find_files_cmd="find . -type d -name .git -prune -o -type f -print -o -type l -print 2>/dev/null"
