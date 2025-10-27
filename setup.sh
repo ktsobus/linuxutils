@@ -1,5 +1,29 @@
 #!/bin/bash
 
+# Parse command line arguments
+EXTRA_ARGS=""
+for arg in "$@"; do
+    case $arg in
+        -h|--help)
+            echo "Usage: $0 [OPTIONS]"
+            echo ""
+            echo "LinuxUtils setup script - Automates installation and configuration of development tools"
+            echo ""
+            echo "OPTIONS:"
+            echo "  -h, --help    Show this help message"
+            echo "  --nvim        Install Neovim and LazyVim configuration (passed to dependencies/init.sh)"
+            echo ""
+            echo "EXAMPLES:"
+            echo "  $0                # Run full setup without Neovim"
+            echo "  $0 --nvim         # Run full setup and install Neovim + LazyVim"
+            exit 0
+            ;;
+        --nvim)
+            EXTRA_ARGS="$EXTRA_ARGS --nvim"
+            ;;
+    esac
+done
+
 # Colors for output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -33,16 +57,21 @@ for subdirectory in "${SETUP_ORDER[@]}"; do
     
     if [[ -f "$init_script" ]]; then
         print_status "Running setup for $subdirectory..."
-        
+
         # Change to the subdirectory and run the init script
-        cd "$SCRIPT_DIR/$subdirectory" && bash init.sh
-        
+        # Pass extra args only to dependencies
+        if [[ "$subdirectory" == "dependencies" ]]; then
+            cd "$SCRIPT_DIR/$subdirectory" && bash init.sh $EXTRA_ARGS
+        else
+            cd "$SCRIPT_DIR/$subdirectory" && bash init.sh
+        fi
+
         if [[ $? -eq 0 ]]; then
             print_status "$subdirectory setup completed successfully"
         else
             print_error "$subdirectory setup failed"
         fi
-        
+
         # Return to main directory
         cd "$SCRIPT_DIR"
         echo ""
@@ -62,16 +91,21 @@ for init_script in "$SCRIPT_DIR"/*/init.sh; do
         fi
         
         print_status "Running setup for $subdirectory..."
-        
+
         # Change to the subdirectory and run the init script
-        cd "$(dirname "$init_script")" && bash init.sh
-        
+        # Pass extra args only to dependencies
+        if [[ "$subdirectory" == "dependencies" ]]; then
+            cd "$(dirname "$init_script")" && bash init.sh $EXTRA_ARGS
+        else
+            cd "$(dirname "$init_script")" && bash init.sh
+        fi
+
         if [[ $? -eq 0 ]]; then
             print_status "$subdirectory setup completed successfully"
         else
             print_error "$subdirectory setup failed"
         fi
-        
+
         # Return to main directory
         cd "$SCRIPT_DIR"
         echo ""

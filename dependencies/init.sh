@@ -1,5 +1,39 @@
 #!/bin/bash
 
+# Parse command line arguments
+INSTALL_NVIM=false
+for arg in "$@"; do
+    case $arg in
+        -h|--help)
+            echo "Usage: $0 [OPTIONS]"
+            echo ""
+            echo "Dependencies initialization script - Installs and updates system dependencies"
+            echo ""
+            echo "OPTIONS:"
+            echo "  -h, --help    Show this help message"
+            echo "  --nvim        Install Neovim and LazyVim configuration"
+            echo ""
+            echo "This script performs the following operations:"
+            echo "  - Updates and upgrades APT packages"
+            echo "  - Installs packages from apt.sh and snap.sh"
+            echo "  - Installs/updates Oh My Zsh and plugins (if zsh is available)"
+            echo "  - Installs/updates NVM and Node.js 22"
+            echo "  - Installs/updates SDKMAN"
+            echo "  - Installs/updates Homebrew and packages from brew.sh"
+            echo "  - Optionally installs Neovim and LazyVim (with --nvim flag)"
+            echo ""
+            echo "EXAMPLES:"
+            echo "  $0                # Run dependencies setup without Neovim"
+            echo "  $0 --nvim         # Run dependencies setup and install Neovim + LazyVim"
+            exit 0
+            ;;
+        --nvim)
+            INSTALL_NVIM=true
+            shift
+            ;;
+    esac
+done
+
 # Colors for output
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -262,3 +296,17 @@ if [[ -f "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
 fi
 print_status "- Homebrew updated/installed"
 print_status "- Custom Homebrew packages installed from brew.sh"
+
+# Install Neovim and LazyVim if --nvim flag was passed
+if [[ "$INSTALL_NVIM" == "true" ]]; then
+    echo ""
+    if [[ -f "$SCRIPT_DIR/nvim.sh" ]]; then
+        print_status "Installing Neovim and LazyVim..."
+        source "$SCRIPT_DIR/nvim.sh"
+        if command -v nvim &> /dev/null; then
+            print_status "- Neovim and LazyVim setup completed"
+        fi
+    else
+        print_warning "nvim.sh not found in $SCRIPT_DIR"
+    fi
+fi
