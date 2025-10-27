@@ -71,12 +71,13 @@ configs/
 │   ├── zshrc.sh      # lädt common/* + zsh-specific
 │   ├── ohmyposh/     # oh-my-posh themes
 │   └── common/
-│       ├── aliases.sh            # für beide shells
-│       ├── fzf.sh                # fzf configuration
+│       ├── aliases.sh            # für beide shells (v alias: nvim > vim)
+│       ├── editor.sh             # editor detection (nvim > vim > vi)
+│       ├── fzf.sh                # fzf configuration (uses nvim if available)
 │       ├── ssh_fzf.sh            # SSH mit fzf
 │       ├── ssh-agent-loader.sh   # SSH agent setup
 │       ├── fapt.sh               # APT helper utilities
-│       ├── fuzzygrep.sh          # fuzzy grep function
+│       ├── fuzzygrep.sh          # fuzzy grep function (uses nvim if available)
 │       ├── neofetch.sh           # neofetch configuration
 │       ├── functions_aliases.sh  # auto-generated function aliases
 │       └── bash_*.sh / zsh_*.sh  # shell-spezifische files
@@ -132,6 +133,7 @@ echo "Backing up database..."
 - **SSH Integration**: SSH agent + FZF integration für easy connections
 - **Modern Tools**: FZF, ripgrep, bat, g-ls, neofetch, lazygit, lazydocker, oh-my-posh und mehr
 - **Optional Neovim**: LazyVim installation via `--nvim` flag
+- **Smart Editor Detection**: Automatisch nvim wenn installiert, sonst vim fallback
 - **Help Documentation**: Built-in help via `-h` or `--help` flags
 
 ## Sourcing Logic
