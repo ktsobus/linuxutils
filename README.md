@@ -8,7 +8,9 @@ Beinhaltet [fzf-utils](https://gitlab.so.ch/solerbus/fzf-utils)
 ```bash
 git clone <repo-url>
 cd linuxutils
-./setup.sh
+./setup.sh         # Standard setup
+./setup.sh --nvim  # Setup with Neovim + LazyVim
+./setup.sh -h      # Show help
 ```
 
 ## Wie es funktioniert
@@ -20,19 +22,23 @@ cd linuxutils
 
 ### Dependencies Flow
 ```
-dependencies/init.sh
+dependencies/init.sh [--nvim]
 ├── apt update/upgrade
 ├── source apt.sh → install APT_PACKAGES[]
+├── snap refresh
+├── source snap.sh → install SNAP_PACKAGES[]
+├── Oh My Zsh → install + plugins (if zsh available)
 ├── NVM → install Node.js 22
 ├── SDKMAN → install JVM tools
-└── brew install/update → source brew.sh → install BREW_PACKAGES[]
+├── brew install/update → source brew.sh → install BREW_PACKAGES[]
+└── [--nvim] Neovim + LazyVim (optional)
 ```
 
 ### Configs Flow
 ```
 configs/init.sh
 ├── bashrc sourcing: echo "source path/to/bashrc.sh" >> ~/.bashrc
-├── zshrc sourcing: echo "source path/to/zshrc.sh" >> ~/.zshrc
+├── zshrc sourcing: replace ~/.zshrc + preserve SDKMAN (am Ende)
 └── applications: source alle setup_*.sh
 ```
 
@@ -55,6 +61,7 @@ functions/init.sh
 dependencies/
 ├── init.sh        # orchestriert package installation + NVM + SDKMAN
 ├── apt.sh         # APT_PACKAGES=("curl" "git" "vim" ...)
+├── snap.sh        # SNAP_PACKAGES=()
 └── brew.sh        # BREW_PACKAGES=() + BREW_CASKS=()
 
 configs/
@@ -64,12 +71,15 @@ configs/
 │   ├── zshrc.sh      # lädt common/* + zsh-specific
 │   ├── ohmyposh/     # oh-my-posh themes
 │   └── common/
-│       ├── aliases.sh        # für beide shells
-│       ├── fzf.sh           # fzf configuration
-│       ├── ssh_fzf.sh       # SSH mit fzf
-│       ├── init_ssh_agent.sh # SSH agent setup
-│       ├── functions_aliases.sh # auto-generated function aliases
-│       └── bash_*.sh        # nur für bash (z.B. bash_neofetch.sh)
+│       ├── aliases.sh            # für beide shells
+│       ├── fzf.sh                # fzf configuration
+│       ├── ssh_fzf.sh            # SSH mit fzf
+│       ├── ssh-agent-loader.sh   # SSH agent setup
+│       ├── fapt.sh               # APT helper utilities
+│       ├── fuzzygrep.sh          # fuzzy grep function
+│       ├── neofetch.sh           # neofetch configuration
+│       ├── functions_aliases.sh  # auto-generated function aliases
+│       └── bash_*.sh / zsh_*.sh  # shell-spezifische files
 └── applications/
     ├── setup_vim.sh  # vim + plugins setup
     └── vim/
@@ -120,7 +130,9 @@ echo "Backing up database..."
 - **Custom Functions**: Eigene Scripts als global verfügbare Commands
 - **Application Setup**: Automatisierte Tool-Konfiguration (Vim, etc.)
 - **SSH Integration**: SSH agent + FZF integration für easy connections
-- **Modern Tools**: FZF, ripgrep, bat, exa, neofetch und mehr
+- **Modern Tools**: FZF, ripgrep, bat, g-ls, neofetch, lazygit, lazydocker, oh-my-posh und mehr
+- **Optional Neovim**: LazyVim installation via `--nvim` flag
+- **Help Documentation**: Built-in help via `-h` or `--help` flags
 
 ## Sourcing Logic
 
