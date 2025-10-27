@@ -80,10 +80,18 @@ export FZF_DEFAULT_OPTS="
 # Keybinding-Variable für Ctrl+F
 export FZF_CTRL_F_BINDING='\C-f'
 
-# Ctrl+F: Datei in vim öffnen – OHNE FZF_COMMON_OPTS, sondern explizite Optionen!
+# Ctrl+F: Datei in vim/nvim öffnen – OHNE FZF_COMMON_OPTS, sondern explizite Optionen!
 fzf-open-file-widget() {
   local selected_file
   local find_files_cmd
+  local editor_cmd
+
+  # Prefer nvim over vim
+  if command -v nvim &>/dev/null; then
+    editor_cmd="nvim"
+  else
+    editor_cmd="vim"
+  fi
 
   if command -v fd &>/dev/null; then
     find_files_cmd="fd --type f --hidden --follow --exclude .git ."
@@ -97,10 +105,10 @@ fzf-open-file-widget() {
 
   if [[ $? -eq 0 ]] && [[ -n "$selected_file" ]]; then
     if [[ -w "$selected_file" ]]; then
-      echo $selected_file | xargs -o vim
+      echo $selected_file | xargs -o "$editor_cmd"
     else
       echo "Datei nicht beschreibbar, versuche mit sudo zu öffnen..."
-      echo $selected_file | xargs -o sudo vim
+      echo $selected_file | xargs -o sudo "$editor_cmd"
     fi
   fi
 }

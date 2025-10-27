@@ -32,10 +32,20 @@ fuzzygrep() {
   local column
   column=$(awk -v IGNORECASE=1 -v l="$linecontent" -v q="$query" 'BEGIN{print index(l,q)}')
 
+  # Use nvim if available, otherwise fallback to vim or $EDITOR
+  local editor_cmd="${EDITOR}"
+  if [ -z "$editor_cmd" ]; then
+    if command -v nvim &>/dev/null; then
+      editor_cmd="nvim"
+    else
+      editor_cmd="vim"
+    fi
+  fi
+
   if [ "$column" -gt 0 ]; then
-    ${EDITOR:-vim} +"call cursor($linenr,$column)" "$file"
+    "$editor_cmd" +"call cursor($linenr,$column)" "$file"
   else
-    ${EDITOR:-vim} +$linenr "$file"
+    "$editor_cmd" +$linenr "$file"
   fi
 
 }

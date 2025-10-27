@@ -7,7 +7,12 @@ alias cls='clear'
 alias lu-dependencies='source ~/linuxutils/dependencies/init.sh'
 alias lu-configs='source ~/linuxutils/configs/init.sh'
 alias lu-functions='source ~/linuxutils/functions/init.sh'
-alias v='vim'
+# Use nvim if available, otherwise fallback to vim
+if command -v nvim &> /dev/null; then
+    alias v='nvim'
+else
+    alias v='vim'
+fi
 alias sau='sudo apt update && sudo apt upgrade -y && sudo snap refresh && brew upgrade'
 
 # Navigation
