@@ -13,6 +13,14 @@ cd linuxutils
 ./setup.sh -h      # Show help
 ```
 
+```
+ctrl + f -> Datei suchen und bearbeiten
+ctrl + t -> Datei suchen und Pfad kopieren
+alt + c -> Ordner suchen und dorthin wechseln
+ctrl + r -> Command History durchsuchen
+ssh -> Alle SHH verbindungen welche unter .ssh/config sind durchsuchen und verbinden
+```
+
 ## Wie es funktioniert
 
 `setup.sh` führt alle `init.sh` in Subdirectories aus:
