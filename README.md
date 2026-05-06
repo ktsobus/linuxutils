@@ -623,6 +623,15 @@ lu-dependencies        # Re-run dependencies/init.sh
 lu-configs             # Re-run configs/init.sh
 lu-functions           # Re-run functions/init.sh
 ```
+```
+ctrl + f -> Datei suchen und bearbeiten
+ctrl + t -> Datei suchen und Pfad kopieren
+alt + c -> Ordner suchen und dorthin wechseln
+ctrl + r -> Command History durchsuchen
+ssh -> Alle SHH verbindungen welche unter .ssh/config sind durchsuchen und verbinden
+```
+
+## Wie es funktioniert
 
 **Network:**
 
