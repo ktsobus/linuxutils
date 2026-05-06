@@ -1,220 +1,352 @@
 # LinuxUtils
 
-> A modular, automated setup system for Ubuntu/WSL development environments
+> Ein modulares, automatisiertes Setup-System für Ubuntu/WSL-Entwicklungsumgebungen
 
-LinuxUtils is a comprehensive shell configuration and development environment setup system that automates the installation and configuration of essential development tools, shell environments, and custom utilities through a hierarchical initialization system. It provides a unified configuration for both Bash and Zsh, integrates modern CLI tools with FZF-powered fuzzy finding, and offers smart editor detection with optional Neovim support.
+[![English](https://img.shields.io/badge/lang-English-blue)](README_EN.md)
 
-## Table of Contents
+LinuxUtils automatisiert die Installation und Konfiguration von Entwicklungswerkzeugen, Shell-Umgebungen und eigenen Utilities über ein hierarchisches Initialisierungssystem. Es bietet eine einheitliche Konfiguration für Bash und Zsh, integriert moderne CLI-Tools mit FZF-basiertem Fuzzy-Finding und erkennt automatisch den bevorzugten Editor.
 
-- [Features at a Glance](#features-at-a-glance)
-- [Quick Start](#quick-start)
+## Inhaltsverzeichnis
+
+- [Schnellstart](#schnellstart)
   - [Installation](#installation)
-  - [First Run](#first-run)
-  - [Verify Installation](#verify-installation)
-- [What Gets Installed](#what-gets-installed)
-  - [System Packages (APT)](#system-packages-apt)
-  - [Homebrew Packages](#homebrew-packages)
-  - [Snap Packages](#snap-packages)
-  - [Development Tools](#development-tools)
+  - [Erster Start](#erster-start)
+  - [Installation überprüfen](#installation-überprüfen)
+- [Features](#features)
+- [Nutzung](#nutzung)
+  - [Befehle & Aliase](#befehle--aliase)
+  - [Tastenkürzel](#tastenkürzel)
+  - [FZF-Werkzeuge](#fzf-werkzeuge)
+  - [SSH-Agent](#ssh-agent)
+  - [Neofetch](#neofetch)
+- [Was wird installiert](#was-wird-installiert)
+  - [Systempakete (APT)](#systempakete-apt)
+  - [Homebrew-Pakete](#homebrew-pakete)
+  - [Snap-Pakete](#snap-pakete)
+  - [Entwicklungswerkzeuge](#entwicklungswerkzeuge)
+  - [Oh My Zsh Plugins](#oh-my-zsh-plugins)
   - [Optional: Neovim + LazyVim](#optional-neovim--lazyvim)
-- [Architecture](#architecture)
-  - [Three-Tier Initialization System](#three-tier-initialization-system)
-  - [Execution Flow Diagram](#execution-flow-diagram)
-  - [Shell Configuration Chain](#shell-configuration-chain)
-- [Custom Features & Utilities](#custom-features--utilities)
-  - [FZF Integration](#fzf-integration)
-  - [SSH with FZF](#ssh-with-fzf)
-  - [Fuzzy Grep Search](#fuzzy-grep-search)
-  - [APT Package Browser (fapt)](#apt-package-browser-fapt)
-  - [Smart Editor Detection](#smart-editor-detection)
-  - [SSH Agent Loader](#ssh-agent-loader)
-  - [Custom Neofetch](#custom-neofetch)
-- [Usage Guide](#usage-guide)
-  - [Common Commands](#common-commands)
-  - [Keyboard Shortcuts](#keyboard-shortcuts)
-  - [Built-in Aliases](#built-in-aliases)
-  - [Re-running Initialization](#re-running-initialization)
-- [Customization](#customization)
-  - [Adding System Packages](#adding-system-packages)
-  - [Adding Shell Configurations](#adding-shell-configurations)
-  - [Creating Custom Functions](#creating-custom-functions)
-  - [Adding Application Setups](#adding-application-setups)
-  - [Creating New Categories](#creating-new-categories)
-- [Configuration Details](#configuration-details)
+- [Architektur](#architektur)
+  - [Drei-Stufen-Initialisierung](#drei-stufen-initialisierung)
+  - [Shell-Konfigurationskette](#shell-konfigurationskette)
+  - [Dateistruktur](#dateistruktur)
+- [Anpassung](#anpassung)
+  - [Pakete hinzufügen](#pakete-hinzufügen)
+  - [Shell-Konfiguration hinzufügen](#shell-konfiguration-hinzufügen)
+  - [Eigene Funktionen erstellen](#eigene-funktionen-erstellen)
+  - [Anwendungs-Setup hinzufügen](#anwendungs-setup-hinzufügen)
+  - [Neue Kategorie erstellen](#neue-kategorie-erstellen)
+- [Konfigurationsdetails](#konfigurationsdetails)
   - [Oh My Zsh Integration](#oh-my-zsh-integration)
-  - [SDKMAN Placement](#sdkman-placement)
-  - [Editor Preference Order](#editor-preference-order)
-  - [File Locations](#file-locations)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
+  - [SDKMAN-Platzierung](#sdkman-platzierung)
+  - [Editor-Präferenz](#editor-präferenz)
+- [Fehlerbehebung](#fehlerbehebung)
+- [Mitwirken](#mitwirken)
 
-## Features at a Glance
-
-✅ **Automated Setup** - One-command installation of complete development environment
-✅ **Idempotent Scripts** - Run setup multiple times without duplicates or conflicts
-✅ **Dual Shell Support** - Unified configuration for both Bash and Zsh
-✅ **Modern CLI Tools** - FZF, ripgrep, bat, lazygit, lazydocker, and more
-✅ **Smart Editor Detection** - Automatically prefers Neovim over Vim
-✅ **FZF Everywhere** - Fuzzy finding for files, history, SSH hosts, and packages
-✅ **Custom Functions** - Extensible command system with auto-generated aliases
-✅ **Oh My Zsh Integration** - Full Zsh plugin ecosystem with custom prompt
-✅ **Development Ready** - Node.js (via NVM), JVM tools (via SDKMAN), Docker
-✅ **SSH Made Easy** - Smart SSH agent management and FZF host selection
-
-## Quick Start
+## Schnellstart
 
 ### Installation
 
 ```bash
-# Clone the repository
+# Repository klonen
 git clone <repo-url> ~/linuxutils
 cd ~/linuxutils
 
-# Make setup script executable (if needed)
+# Setup-Skript ausführbar machen (falls nötig)
 chmod +x setup.sh
 ```
 
-### First Run
+### Erster Start
 
 ```bash
-# Standard setup (installs everything except Neovim)
+# Standard-Setup (installiert alles ausser Neovim)
 ./setup.sh
 
-# Setup with Neovim + LazyVim configuration
+# Setup mit Neovim + LazyVim-Konfiguration
 ./setup.sh --nvim
 
-# View help and all options
+# Hilfe und alle Optionen anzeigen
 ./setup.sh --help
 ```
 
-The setup process will:
+Der Setup-Prozess durchläuft folgende Schritte:
 
-1. Install and update all system packages
-2. Install Oh My Zsh and plugins (if zsh available)
-3. Install NVM and Node.js 22
-4. Install SDKMAN for JVM tools
-5. Install Homebrew and all configured packages
-6. Configure shell environments (Bash/Zsh)
-7. Set up Vim with plugins
-8. Optionally install Neovim + LazyVim
+1. Systemweit alle Pakete installieren und aktualisieren
+2. Oh My Zsh und Plugins installieren (falls Zsh verfügbar)
+3. NVM und Node.js 22 installieren
+4. SDKMAN für JVM-Tools installieren
+5. Homebrew installieren und konfigurierte Pakete einrichten
+6. Shell-Umgebungen (Bash/Zsh) konfigurieren
+7. Vim mit Plugins einrichten
+8. Optional: Neovim + LazyVim installieren
 
-### Verify Installation
+### Installation überprüfen
 
 ```bash
-# Restart your terminal or source the configuration
-source ~/.bashrc    # for Bash
-source ~/.zshrc     # for Zsh
+# Terminal neustarten oder Konfiguration laden
+source ~/.bashrc    # für Bash
+source ~/.zshrc     # für Zsh
 
-# Test FZF integration
+# FZF-Integration testen
 fzf --version
 
-# Test custom commands
-fapt --help         # FZF APT package browser
-f sometext          # Fuzzy grep search
-ssh                 # SSH with FZF host selection (no arguments)
+# Eigene Befehle testen
+fapt                # FZF-APT-Paketbrowser
+f suchbegriff       # Fuzzy-Grep-Suche
+ssh                 # SSH mit FZF-Hostauswahl (ohne Argumente)
 
-# Check editor preference
-echo $EDITOR        # Should show nvim or vim
+# Editor-Präferenz prüfen
+echo $EDITOR        # Sollte nvim oder vim zeigen
 ```
 
-## What Gets Installed
+## Features
 
-### System Packages (APT)
+- **Automatisiertes Setup** — Ein Befehl installiert die komplette Entwicklungsumgebung
+- **Idempotente Skripte** — Mehrfach ausführbar ohne Duplikate oder Konflikte
+- **Dual-Shell-Support** — Einheitliche Konfiguration für Bash und Zsh
+- **Moderne CLI-Tools** — FZF, ripgrep, bat, lazygit, lazydocker und mehr
+- **Intelligente Editor-Erkennung** — Bevorzugt automatisch Neovim gegenüber Vim; setzt `$EDITOR`, `$VISUAL` und `$PREFERRED_EDITOR`
+- **FZF überall** — Fuzzy-Finding für Dateien, History, SSH-Hosts und APT-Pakete
+- **Eigene Funktionen** — Erweiterbares Befehlssystem mit auto-generierten Aliasen
+- **Oh My Zsh Integration** — Vollständiges Zsh-Plugin-Ökosystem mit oh-my-posh Prompt
+- **Entwicklung sofort bereit** — Node.js (via NVM), JVM-Tools (via SDKMAN), Docker
+- **SSH leicht gemacht** — Intelligentes SSH-Agent-Management und FZF-Hostauswahl
 
-Core utilities and development tools:
+## Nutzung
 
-| Package           | Description                                     |
-| ----------------- | ----------------------------------------------- |
-| `git`             | Version control system                          |
-| `tree`            | Directory tree visualization                    |
-| `build-essential` | Compilation tools (gcc, make, etc.)             |
-| `zsh`             | Z Shell - Modern shell alternative              |
-| `neofetch`        | System information display                      |
-| `cowsay`          | ASCII art text generator                        |
-| `ansiweather`     | Terminal weather display                        |
-| `zip` / `unzip`   | Archive utilities                               |
-| `tar` / `gzip`    | Compression tools                               |
-| `htop`            | Interactive process viewer                      |
-| `btop`            | Modern resource monitor                         |
-| `ripgrep`         | Fast text search tool (rg)                      |
-| `bat`             | Modern cat replacement with syntax highlighting |
-| `gdu`             | Fast disk usage analyzer                        |
-| `traceroute`      | Network diagnostic tool                         |
+### Befehle & Aliase
 
-### Homebrew Packages
+**Setup & Wartung:**
 
-Modern CLI tools installed via Homebrew:
+| Alias | Befehl | Beschreibung |
+|-------|--------|-------------|
+| `sau` | `apt update && upgrade + snap refresh + brew upgrade` | Alle Pakete aktualisieren, Shell neustarten |
+| `lu-dependencies` | `source ~/linuxutils/dependencies/init.sh` | Abhängigkeiten neu installieren |
+| `lu-dependencies --nvim` | — | Mit Neovim-Installation |
+| `lu-configs` | `source ~/linuxutils/configs/init.sh` | Shell-Konfiguration neu einrichten |
+| `lu-functions` | `source ~/linuxutils/functions/init.sh` | Funktions-Aliase neu generieren |
 
-| Package      | Description                      |
-| ------------ | -------------------------------- |
-| `fzf`        | Command-line fuzzy finder        |
-| `oh-my-posh` | Cross-shell prompt theme engine  |
-| `lazygit`    | Terminal UI for git commands     |
-| `lazydocker` | Terminal UI for docker commands  |
-| `g-ls`       | Modern ls replacement with icons |
-| `asciinema`  | Terminal session recorder        |
-| `agg`        | Asciinema GIF generator          |
+**Navigation:**
 
-### Snap Packages
+| Alias | Befehl | Beschreibung |
+|-------|--------|-------------|
+| `..` | `cd ..` | Ein Verzeichnis nach oben |
+| `ls` | `g --icon --sort=name` | Dateien mit Icons auflisten |
+| `ll` | `g --icon --long --sort=name --sh` | Ausführliche Liste mit Icons |
+| `la` | `ls -A` | Alle Dateien inkl. versteckte |
+| `cls` | `clear` | Bildschirm löschen |
 
-Containerized applications:
+**Editor:**
 
-- **Docker** - Container platform for development
+| Alias | Befehl | Beschreibung |
+|-------|--------|-------------|
+| `v` | `nvim` oder `vim` | Bevorzugten Editor öffnen (auto-erkannt) |
 
-### Development Tools
+**Git:**
+
+| Alias | Befehl | Beschreibung |
+|-------|--------|-------------|
+| `gs` | `git status` | Git-Status anzeigen |
+| `ga` | `git add` | Dateien stagen |
+| `lg` | `lazygit` | Terminal-UI für Git |
+
+**Suche:**
+
+| Alias | Befehl | Beschreibung |
+|-------|--------|-------------|
+| `f` | `fuzzygrep` | Interaktive Textsuche mit FZF (siehe [FZF-Werkzeuge](#fzf-werkzeuge)) |
+
+**Pakete:**
+
+| Alias | Befehl | Beschreibung |
+|-------|--------|-------------|
+| `fapt` / `apt-search` | — | Interaktiver APT-Paketbrowser (siehe [FZF-Werkzeuge](#fzf-werkzeuge)) |
+
+**Netzwerk:**
+
+| Alias | Befehl | Beschreibung |
+|-------|--------|-------------|
+| `unset-proxys` | `unset HTTP_PROXY HTTPS_PROXY ...` | Alle Proxy-Variablen entfernen |
+
+**Shell:**
+
+| Alias | Befehl | Beschreibung |
+|-------|--------|-------------|
+| `change-my-shell` | — | Zwischen Bash und Zsh wechseln |
+
+### Tastenkürzel
+
+Alle FZF-Tastenkürzel auf einen Blick:
+
+| Taste | Funktion | Beschreibung |
+|-------|----------|-------------|
+| `Ctrl+T` | Pfad durchsuchen | Datei suchen und Pfad an Cursor-Position einfügen |
+| `Ctrl+R` | History durchsuchen | Befehlsverlauf mit Vorschau durchsuchen |
+| `Alt+C` | Verzeichniswechsel | Verzeichnis suchen und per `cd` wechseln |
+| `Ctrl+F` | Datei bearbeiten | Datei suchen und in vim/nvim öffnen |
+| `Ctrl+/` | Vorschau umschalten | Vorschaufenster ein-/ausblenden |
+| `Alt+S` | SSH-Hostauswahl | FZF-basierte SSH-Verbindung starten |
+
+### FZF-Werkzeuge
+
+#### Fuzzy-Grep-Suche (`f` / `fuzzygrep`)
+
+Interaktive Zwei-Stufen-Textsuche über alle Dateien:
+
+```bash
+f "suchbegriff"    # Direkt suchen
+f                  # Interaktive Eingabe
+```
+
+**Ablauf:**
+
+1. **Schritt 1:** Alle Dateien mit dem Suchbegriff finden (via `ripgrep`)
+2. **Schritt 2:** Spezifischen Treffer in der ausgewählten Datei auswählen
+3. **Editor** öffnet sich an exakter Zeilen- und Spaltenposition
+
+Die Vorschau zeigt den Kontext mit Syntax-Highlighting (via `bat`).
+
+#### APT-Paketbrowser (`fapt` / `apt-search`)
+
+Interaktiver APT-Paketbrowser mit detaillierter Vorschau:
+
+```bash
+fapt               # Paketbrowser starten
+apt-search          # Gleiche Funktion
+```
+
+**Vorschau zeigt:**
+- Paketname und Version
+- Installationsstatus (farbcodiert)
+- Beschreibung, Kategorie, Maintainer und Homepage
+
+Pakete können direkt aus dem Browser installiert werden. Bei bereits installierten Paketen wird eine Bestätigung für Neuinstallation/Aktualisierung abgefragt.
+
+#### SSH mit FZF (`ssh` / `Alt+S`)
+
+Smartes SSH mit Fuzzy-Hostauswahl:
+
+```bash
+ssh                 # Ohne Argumente: FZF-Hostauswahl aus ~/.ssh/config
+ssh user@host       # Traditionelles SSH funktioniert weiterhin
+# Alt+S             # Tastenkürzel für Hostauswahl
+```
+
+**Funktionsweise:**
+- Liest Hosts aus `~/.ssh/config` (ohne Wildcards)
+- Fügt den gewählten Befehl zur Shell-History hinzu
+- Erhält TTY für interaktive Sitzungen
+- Funktioniert in Bash und Zsh
+
+### SSH-Agent
+
+Intelligentes SSH-Key-Management beim Shell-Start:
+
+- Startet `ssh-agent` automatisch, falls nicht aktiv
+- Nutzt vorhandenen Agent wieder, falls vorhanden
+- Erkennt automatisch verschlüsselte vs. unverschlüsselte Schlüssel
+- Lädt unverschlüsselte Schlüssel lautlos
+- Bei verschlüsselten Schlüsseln:
+  - Fragt einmal nach einem gemeinsamen Passwort
+  - Probiert dieses Passwort bei allen verschlüsselten Schlüsseln
+  - Individuelle Abfrage nur für Schlüssel mit abweichendem Passwort
+- Keine doppelte Schlüsselladung
+
+### Neofetch
+
+Angepasste Systemanzeige beim Shell-Start:
+
+- ASCII-Art mit `cowsay` (Tux-Pinguin)
+- Live-Wetter für Solothurn, CH (via `ansiweather`)
+- Farbcodiert nach Shell: Zsh (Lila), Bash (Cyan), andere (Weiss)
+- Fallback auf Standard-Neofetch, falls Abhängigkeiten fehlen
+
+## Was wird installiert
+
+### Systempakete (APT)
+
+| Paket | Beschreibung |
+|-------|-------------|
+| `git` | Versionskontrollsystem |
+| `tree` | Verzeichnisbaum-Visualisierung |
+| `build-essential` | Kompilierungswerkzeuge (gcc, make, etc.) |
+| `zsh` | Z Shell — Moderne Shell-Alternative |
+| `neofetch` | Systeminformationsanzeige |
+| `cowsay` | ASCII-Art-Textgenerator |
+| `ansiweather` | Wetter im Terminal |
+| `zip` / `unzip` | Archiv-Utilities |
+| `tar` / `gzip` | Komprimierungswerkzeuge |
+| `htop` | Interaktiver Prozess-Viewer |
+| `btop` | Moderner Ressourcenmonitor |
+| `ripgrep` | Schnelles Textsuch-Tool (`rg`) |
+| `bat` | Moderner `cat`-Ersatz mit Syntax-Highlighting |
+| `gdu` | Schneller Speicherplatz-Analyzer |
+| `traceroute` | Netzwerk-Diagnosewerkzeug |
+
+### Homebrew-Pakete
+
+| Paket | Beschreibung |
+|-------|-------------|
+| `fzf` | Kommandozeilen-Fuzzy-Finder |
+| `oh-my-posh` | Cross-Shell Prompt-Theme-Engine |
+| `lazygit` | Terminal-UI für Git |
+| `lazydocker` | Terminal-UI für Docker |
+| `g-ls` | Moderner `ls`-Ersatz mit Icons |
+| `asciinema` | Terminal-Session-Recorder |
+| `agg` | Asciinema-GIF-Generator |
+| `snitch` | Netzwerkverkehr-Monitor |
+
+### Snap-Pakete
+
+- **Docker** — Container-Plattform für Entwicklung
+
+### Entwicklungswerkzeuge
 
 **Node.js** (via NVM)
-
-- Node.js version 22 (LTS)
-- Automatically configured with default alias
+- Node.js Version 22 (LTS)
+- Automatisch als Standard konfiguriert
 
 **SDKMAN**
+- Java SDK Manager für JVM-Tools
+- `sdk install java` nach Setup ausführen, um Java zu installieren
 
-- Java SDK manager
-- Pre-configured for JVM tool installation
-- Run `sdk install java` after setup to install Java
+### Oh My Zsh Plugins
 
-**Oh My Zsh Plugins** (if Zsh available)
+Folgende Plugins werden automatisch installiert und aktiviert (falls Zsh vorhanden):
 
-- `git` - Git aliases and functions
-- `colorize` - Syntax highlighting for files
-- `colored-man-pages` - Colorful manual pages
-- `compleat` - Enhanced completions
-- `emoji` - Emoji support in terminal
-- `ssh` - SSH helper functions
-- `you-should-use` - Reminds you to use existing aliases
-- `zsh-autosuggestions` - Fish-like autosuggestions
-- `zsh-syntax-highlighting` - Syntax highlighting for commands
-- `fast-syntax-highlighting` - Faster syntax highlighting alternative
+| Plugin | Beschreibung |
+|--------|-------------|
+| `git` | Git-Aliase und -Funktionen |
+| `colorize` | Syntax-Highlighting für Dateien |
+| `colored-man-pages` | Farbige Manpages |
+| `compleat` | Erweiterte Tab-Completion |
+| `emoji` | Emoji-Support im Terminal |
+| `ssh` | SSH-Hilfsfunktionen |
+| `you-should-use` | Erinnert an vorhandene Aliase |
+| `zsh-autosuggestions` | Fish-ähnliche Autovervollständigung |
+| `zsh-syntax-highlighting` | Syntax-Highlighting für Befehle |
+| `fast-syntax-highlighting` | Schnellere Syntax-Highlighting Alternative |
 
 ### Optional: Neovim + LazyVim
 
-When using the `--nvim` flag:
+Mit dem `--nvim` Flag:
 
-- **Neovim** - Hyperextensible Vim-based text editor
-- **LazyVim** - Pre-configured Neovim distribution with plugins
-- Automatically backs up existing Neovim configuration
-- Installs on first `nvim` startup
+- **Neovim** — Hypererweiterbarer Vim-basierter Texteditor
+- **LazyVim** — Vorkonfigurierte Neovim-Distribution mit Plugins
+- Sichert automatisch vorhandene Neovim-Konfiguration
+- Plugins werden beim ersten `nvim`-Start installiert
 
-## Architecture
+## Architektur
 
-### Three-Tier Initialization System
+### Drei-Stufen-Initialisierung
 
-LinuxUtils uses a hierarchical setup orchestrated by `setup.sh`:
-
-```
-setup.sh
-├── 1. dependencies/init.sh    (System packages & tools)
-├── 2. configs/init.sh          (Shell & application configs)
-└── 3. functions/init.sh        (Custom functions & aliases)
-```
-
-### Execution Flow Diagram
+LinuxUtils verwendet ein hierarchisches Setup, orchestriert durch `setup.sh`:
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │                    setup.sh                         │
-│  Orchestrates all initialization in correct order   │
+│  Orchestriert alle Initialisierungen in der         │
+│  richtigen Reihenfolge                              │
 └─────────────────────────────────────────────────────┘
                         │
         ┌───────────────┼───────────────┐
@@ -224,20 +356,19 @@ setup.sh
 │    init.sh    │ │    init.sh    │ │    init.sh    │
 └───────────────┘ └───────────────┘ └───────────────┘
         │               │               │
-        │               │               │
         ▼               ▼               ▼
 ┌───────────────┐ ┌───────────────┐ ┌───────────────┐
-│  APT/Brew/    │ │  Shell Configs│ │  Make scripts │
-│  Snap Packages│ │  → bashrc.sh  │ │  executable   │
-│               │ │  → zshrc.sh   │ │               │
-│  NVM/Node.js  │ │               │ │  Generate     │
-│               │ │  Application  │ │  aliases for  │
-│  SDKMAN/JVM   │ │  setups:      │ │  all custom   │
-│               │ │  → setup_*.sh │ │  functions    │
-│  Homebrew     │ │               │ │               │
-│               │ │  Preserve     │ │  Create       │
-│  Oh My Zsh    │ │  SDKMAN at    │ │  functions_   │
-│  + plugins    │ │  end of .rc   │ │  aliases.sh   │
+│  APT/Brew/    │ │  Shell Configs│ │  Skripte      │
+│  Snap Pakete  │ │  → bashrc.sh  │ │  ausführbar   │
+│               │ │  → zshrc.sh   │ │  machen       │
+│  NVM/Node.js  │ │               │ │               │
+│               │ │  Anwendungen: │ │  Aliase für   │
+│  SDKMAN/JVM   │ │  → setup_*.sh │ │  alle eigenen │
+│               │ │               │ │  Funktionen   │
+│  Homebrew     │ │  SDKMAN am    │ │  generieren   │
+│               │ │  Ende der .rc │ │               │
+│  Oh My Zsh    │ │  Dateien      │ │               │
+│  + Plugins    │ │  erhalten     │ │               │
 │               │ │               │ │               │
 │  [Optional]   │ │               │ │               │
 │  Neovim +     │ │               │ │               │
@@ -245,901 +376,353 @@ setup.sh
 └───────────────┘ └───────────────┘ └───────────────┘
 ```
 
-### Shell Configuration Chain
+**Stufe 1 — Dependencies** (`dependencies/init.sh`): Installiert und aktualisiert alle System-Pakete (APT, Snap, Homebrew), Entwicklungstools (NVM, SDKMAN), Oh My Zsh mit Plugins und optional Neovim.
 
-**Bash Configuration Flow:**
+**Stufe 2 — Configs** (`configs/init.sh`): Modifiziert `~/.bashrc` und `~/.zshrc`, um die eigenen Shell-Konfigurationen zu laden. Führt automatisch alle `applications/setup_*.sh` Skripte aus. Stellt sicher, dass SDKMAN-Exports am Ende der Shell-Dateien bleiben.
 
+**Stufe 3 — Functions** (`functions/init.sh`): Macht alle `*.sh` Skripte in `functions/` ausführbar und generiert automatisch Aliase (ohne `.sh`-Endung) in `configs/shell/common/functions_aliases.sh`.
+
+### Shell-Konfigurationskette
+
+Beide Shells laden die gemeinsamen Konfigurationen aus `configs/shell/common/`:
+
+**Bash:**
 ```
-~/.bashrc
-  │
-  └─→ source ~/linuxutils/configs/shell/bashrc.sh
-        │
-        ├─→ Eval Homebrew shellenv
-        ├─→ Initialize oh-my-posh
-        ├─→ Configure bash-specific settings
-        │
-        └─→ Source all common/*.sh files
-              ├─→ editor.sh (detect nvim/vim)
-              ├─→ fzf.sh (fuzzy finder config)
-              ├─→ aliases.sh (common aliases)
-              ├─→ ssh_fzf.sh (SSH integration)
-              ├─→ fuzzygrep.sh (search function)
-              ├─→ fapt.sh (APT browser)
-              ├─→ functions_aliases.sh (auto-generated)
-              ├─→ neofetch.sh (startup display)
-              ├─→ ssh-agent-loader.sh (SSH key management)
-              │
-              └─→ Source all bash_*.sh files (bash-specific)
+~/.bashrc → configs/shell/bashrc.sh → common/*.sh → common/bash_*.sh
 ```
 
-**Zsh Configuration Flow:**
-
+**Zsh:**
 ```
-~/.zshrc
-  │
-  └─→ source ~/linuxutils/configs/shell/zshrc.sh
-        │
-        ├─→ Initialize Oh My Zsh (if installed)
-        ├─→ Eval Homebrew shellenv
-        ├─→ Initialize oh-my-posh (overrides OMZ prompt)
-        ├─→ Configure zsh-specific settings
-        │
-        ├─→ Source all common/*.sh files
-        │     (same as Bash, see above)
-        │
-        ├─→ Source all zsh_*.sh files (zsh-specific)
-        │
-        ├─→ Unalias 'g' (prevent conflict with g-ls)
-        │
-        ├─→ Initialize NVM
-        │
-        └─→ Initialize SDKMAN (must be at end!)
+~/.zshrc → configs/shell/zshrc.sh → Oh My Zsh → common/*.sh → common/zsh_*.sh
 ```
 
-**Key Points:**
+**Wichtige Details:**
+- Dateien in `common/` werden von beiden Shells geladen (ausser mit `bash_` oder `zsh_` Präfix)
+- `zshrc.sh` ersetzt die Standard-Oh-My-Zsh `.zshrc`, behält aber SDKMAN-Konfiguration bei
+- Oh My Zsh wird mit leerem Theme initialisiert; `oh-my-posh` übernimmt den Prompt
+- Das `g`-Alias wird nach Oh My Zsh entfernt, um Konflikte mit `g-ls` zu vermeiden
+- Homebrew shellenv wird früh geladen, damit alle Brew-Befehle verfügbar sind
 
-- Both shells share `configs/shell/common/*.sh` files
-- Shell-specific files use prefixes: `bash_*.sh` or `zsh_*.sh`
-- SDKMAN initialization must always be at the end
-- Oh My Zsh integrates seamlessly with custom configurations
+### Dateistruktur
 
-## Custom Features & Utilities
-
-### FZF Integration
-
-FZF (fuzzy finder) is deeply integrated throughout the system with custom keybindings:
-
-**Keyboard Shortcuts:**
-
-| Key      | Function       | Description                           |
-| -------- | -------------- | ------------------------------------- |
-| `Ctrl+T` | File search    | Search and insert file path at cursor |
-| `Ctrl+R` | History search | Search command history with preview   |
-| `Alt+C`  | Directory jump | Search and cd into directory          |
-| `Ctrl+F` | File editor    | Search files and open in vim/nvim     |
-| `Ctrl+/` | Toggle preview | Show/hide preview window              |
-
-**Features:**
-
-- Beautiful borders and labels (German localization)
-- Live preview with syntax highlighting (bat/batcat)
-- Smart file search using `fd` or `fdfind` when available
-- Automatic nvim/vim detection for file opening
-- Tree preview for directory navigation
-- Custom color scheme
-
-### SSH with FZF
-
-Smart SSH connection with fuzzy finding:
-
-```bash
-# Run ssh without arguments to get FZF host selector
-ssh
-
-# Or use the keyboard shortcut
-# Alt+S  - Opens FZF SSH host selector
+```
+~/linuxutils/
+├── setup.sh                                   # Haupt-Setup-Skript
+├── README.md                                  # Dokumentation (Deutsch)
+├── README_EN.md                               # Dokumentation (Englisch)
+│
+├── dependencies/                              # Stufe 1: Paket-Installation
+│   ├── init.sh                                # Hauptskript für Abhängigkeiten
+│   ├── apt.sh                                 # APT-Paketliste
+│   ├── brew.sh                                # Homebrew-Paketliste
+│   ├── snap.sh                                # Snap-Paketliste
+│   └── nvim.sh                                # Neovim + LazyVim Setup
+│
+├── configs/                                   # Stufe 2: Konfigurationen
+│   ├── init.sh                                # Konfigurationseinrichtung
+│   ├── shell/
+│   │   ├── bashrc.sh                          # Bash-Konfiguration
+│   │   ├── zshrc.sh                           # Zsh-Konfiguration
+│   │   ├── common/                            # Gemeinsame Shell-Configs
+│   │   │   ├── aliases.sh                     # Allgemeine Aliase
+│   │   │   ├── editor.sh                      # Editor-Erkennung
+│   │   │   ├── fzf.sh                         # FZF-Konfiguration & Keybindings
+│   │   │   ├── fuzzygrep.sh                   # Fuzzy-Grep-Funktion
+│   │   │   ├── ssh_fzf.sh                     # SSH mit FZF
+│   │   │   ├── fapt.sh                        # APT-Paketbrowser
+│   │   │   ├── ssh-agent-loader.sh            # SSH-Agent-Management
+│   │   │   ├── neofetch.sh                    # Systeminfo-Anzeige
+│   │   │   ├── functions_aliases.sh           # Auto-generierte Aliase
+│   │   │   ├── bash_*.sh                      # Nur-Bash-Configs
+│   │   │   └── zsh_*.sh                       # Nur-Zsh-Configs
+│   │   └── ohmyposh/
+│   │       └── custom-zash.omp.json           # Oh-my-posh Theme
+│   └── applications/
+│       ├── setup_vim.sh                       # Vim-Setup
+│       └── vim/                               # Vim-Konfiguration
+│           ├── vimrc                          # → Symlink nach ~/.vimrc
+│           └── plugins.vim                    # Vim-Plugins
+│
+└── functions/                                 # Stufe 3: Eigene Funktionen
+    ├── init.sh                                # Funktions-Initialisierung
+    └── change-my-shell.sh                     # Shell-Wechsel-Utility
 ```
 
-**Features:**
+## Anpassung
 
-- Reads hosts from `~/.ssh/config`
-- Excludes wildcard patterns
-- Adds selected command to shell history
-- Preserves TTY for interactive sessions
-- Works in both Bash and Zsh
+### Pakete hinzufügen
 
-### Fuzzy Grep Search
-
-Interactive two-step search tool (aliased as `f`):
-
-```bash
-# Search for text across all files
-f "searchterm"
-
-# Interactive prompt if no term provided
-f
-```
-
-**How it works:**
-
-1. **Step 1:** Find all files containing the search term
-2. **Step 2:** Select specific match within chosen file
-3. **Opens editor** at exact line and column position
-
-**Features:**
-
-- Uses `ripgrep` for blazing fast search
-- Preview shows context with syntax highlighting
-- Opens vim/nvim at exact match location
-- Smart column positioning in editor
-
-### APT Package Browser (fapt)
-
-Interactive APT package browser with beautiful UI:
-
-```bash
-# Launch the package browser
-fapt
-
-# Also available as
-apt-search
-```
-
-**Features:**
-
-- Browse all available APT packages with FZF
-- Rich preview showing:
-  - Package name and version
-  - Installation status (color-coded)
-  - Description and details
-  - Maintainer and homepage
-- Install/reinstall packages directly
-- Confirmation prompt for already-installed packages
-- Beautiful box-drawing characters and colors
-
-### Smart Editor Detection
-
-The system automatically detects and configures your preferred editor:
-
-**Detection Order:**
-
-1. `nvim` (Neovim) - Preferred if installed
-2. `vim` (Vim) - Fallback if Neovim unavailable
-3. `vi` - Last resort
-
-**Environment Variables Set:**
-
-- `$EDITOR` - Used by git, cron, etc.
-- `$VISUAL` - Used by some applications
-- `$PREFERRED_EDITOR` - Custom variable for scripts
-
-**Integration:**
-
-- `v` alias points to preferred editor
-- FZF file opening uses detected editor
-- Fuzzygrep opens files in detected editor
-- All custom utilities respect preference
-
-### SSH Agent Loader
-
-Intelligent SSH key management on shell startup:
-
-**Features:**
-
-- Starts ssh-agent if not running
-- Reuses existing agent if available
-- Automatically detects encrypted vs unencrypted keys
-- Loads unencrypted keys silently
-- For encrypted keys:
-  - Prompts once for common password
-  - Tries common password on all encrypted keys
-  - Individual prompts for keys with different passwords
-  - Validates each key before moving to next
-- No duplicate key loading
-
-**Behavior:**
-
-- Runs automatically on shell initialization
-- Silent for unencrypted keys
-- Interactive only when necessary
-- Secure password handling (no echoing)
-
-### Custom Neofetch
-
-Enhanced system information display on shell startup:
-
-**Features:**
-
-- ASCII art with cowsay (flaming-sheep)
-- Live weather for Solothurn, CH
-- Color-coded by shell:
-  - Zsh: Pink/Gold
-  - Bash: Cyan
-  - Others: White
-- Only runs if all dependencies available
-- Falls back to standard neofetch
-
-## Usage Guide
-
-### Common Commands
-
-**Setup & Maintenance:**
-
-```bash
-# Show help and options
-./setup.sh -h
-./setup.sh --help
-
-# Full setup
-./setup.sh
-
-# Setup with Neovim
-./setup.sh --nvim
-
-# Update all system packages
-sau
-
-# Re-run specific initialization
-lu-dependencies        # Re-run dependency installation
-lu-dependencies --nvim # With Neovim installation
-lu-configs             # Re-configure shells
-lu-functions           # Regenerate function aliases
-```
-
-**File & Directory Navigation:**
-
-```bash
-# Change to parent directory
-..
-
-# List files with icons
-ls              # g-ls with icons
-ll              # Long format with icons, sorted by name
-
-# Search and open file
-Ctrl+F          # Interactive file search
-```
-
-**Search & Find:**
-
-```bash
-# Fuzzy grep search
-f "searchterm"          # Search and open at exact match
-fuzzygrep "searchterm"  # Same as above
-
-# FZF search (interactive)
-Ctrl+T          # File search, insert path
-Ctrl+R          # Command history
-Alt+C           # Directory search and cd
-```
-
-**SSH:**
-
-```bash
-# SSH with host selection
-ssh             # Opens FZF host picker
-Alt+S           # Keyboard shortcut for host picker
-
-# Traditional SSH still works
-ssh user@host
-```
-
-**Package Management:**
-
-```bash
-# Interactive APT browser
-fapt
-apt-search      # Same as above
-
-# System update
-sau             # Update APT, Snap, Homebrew
-```
-
-**Git:**
-
-```bash
-gs              # git status
-ga              # git add
-lg              # lazygit (terminal UI)
-```
-
-**Editor:**
-
-```bash
-v file.txt      # Open in preferred editor (nvim/vim)
-```
-
-**Shell:**
-
-```bash
-# Switch default shell
-change-my-shell # Toggle between bash and zsh
-```
-
-**Network:**
-
-```bash
-# Unset all proxy variables
-unset-proxys
-```
-
-### Keyboard Shortcuts
-
-**FZF Integration:**
-
-- `Ctrl+T` - Search files and insert path
-- `Ctrl+R` - Search command history
-- `Alt+C` - Search and change directory
-- `Ctrl+F` - Search and open file in editor
-- `Ctrl+/` - Toggle preview in FZF
-- `Alt+S` - SSH host selector (FZF)
-
-**Bash Specific:**
-
-- Tab completion is case-insensitive
-- First tab shows all ambiguous completions
-
-**Zsh Specific:**
-
-- `Ctrl+R` - Incremental backward search
-
-### Built-in Aliases
-
-**Essential:**
-
-```bash
-cls                    # Clear screen
-v                      # nvim or vim (auto-detected)
-sau                    # System update (APT + Snap + Brew)
-```
-
-**Navigation:**
-
-```bash
-..                     # cd ..
-ls                     # g --icon --sort=name
-ll                     # g --icon --long --sort=name --sh
-la                     # ls -A
-```
-
-**Git:**
-
-```bash
-gs                     # git status
-ga                     # git add
-lg                     # lazygit
-```
-
-**Search:**
-
-```bash
-f                      # fuzzygrep (search and edit)
-```
-
-**Setup:**
-
-```bash
-lu-dependencies        # Re-run dependencies/init.sh
-lu-configs             # Re-run configs/init.sh
-lu-functions           # Re-run functions/init.sh
-```
-
-**Network:**
-
-```bash
-unset-proxys          # Unset all proxy environment variables
-```
-
-**Package Management:**
-
-```bash
-apt-search            # fapt (APT package browser)
-```
-
-### Re-running Initialization
-
-After making changes to configurations:
-
-**Shell Configuration Changes:**
-
-```bash
-# Apply changes without restarting terminal
-source ~/.bashrc      # For Bash
-source ~/.zshrc       # For Zsh
-
-# Or use the alias after re-running config init
-lu-configs
-source ~/.bashrc      # or ~/.zshrc
-```
-
-**Added New Function:**
-
-```bash
-# Regenerate aliases and reload
-lu-functions
-source ~/.bashrc      # or ~/.zshrc
-```
-
-**Added New Package:**
-
-```bash
-# Edit apt.sh, brew.sh, or snap.sh, then:
-lu-dependencies
-```
-
-**Full Re-initialization:**
-
-```bash
-cd ~/linuxutils
-./setup.sh           # Run full setup again (idempotent)
-```
-
-## Customization
-
-### Adding System Packages
-
-**APT Packages:**
-
-1. Edit `dependencies/apt.sh`
-2. Add package name to `APT_PACKAGES` array:
+**APT-Pakete** — `dependencies/apt.sh` bearbeiten:
 
 ```bash
 APT_PACKAGES=(
     "git"
     "vim"
-    "your-new-package"  # Add here
+    "neues-paket"    # Hier hinzufügen
 )
 ```
 
-3. Run: `lu-dependencies`
-
-**Homebrew Packages:**
-
-1. Edit `dependencies/brew.sh`
-2. Add to `BREW_PACKAGES` or `BREW_CASKS` array:
+**Homebrew-Pakete** — `dependencies/brew.sh` bearbeiten:
 
 ```bash
 BREW_PACKAGES=(
     "fzf"
-    "your-new-package"  # Add here
+    "neues-paket"    # Hier hinzufügen
 )
 ```
 
-3. Run: `lu-dependencies`
-
-**Snap Packages:**
-
-1. Edit `dependencies/snap.sh`
-2. Add to `SNAP_PACKAGES` array:
+**Snap-Pakete** — `dependencies/snap.sh` bearbeiten:
 
 ```bash
 SNAP_PACKAGES=(
     "docker"
-    "your-new-package"  # Add here
+    "neues-paket"    # Hier hinzufügen
 )
 ```
 
-3. Run: `lu-dependencies`
+Danach: `lu-dependencies` ausführen.
 
-### Adding Shell Configurations
+### Shell-Konfiguration hinzufügen
 
-Create files in `configs/shell/common/`:
-
-**For Both Shells:**
+Neue Dateien in `configs/shell/common/` erstellen:
 
 ```bash
-# Create a new configuration file
-touch configs/shell/common/my-feature.sh
+# Für beide Shells (Bash + Zsh)
+configs/shell/common/mein-feature.sh
 
-# Add your configuration
-echo 'export MY_VAR="value"' >> configs/shell/common/my-feature.sh
-echo 'alias myalias="command"' >> configs/shell/common/my-feature.sh
+# Nur für Bash
+configs/shell/common/bash_mein-feature.sh
 
-# No additional setup needed - automatically loaded on next shell start
+# Nur für Zsh
+configs/shell/common/zsh_mein-feature.sh
 ```
 
-**Bash Only:**
+Die Dateien werden beim nächsten Shell-Start automatisch geladen — kein weiteres Setup nötig. Zum sofortigen Laden:
 
 ```bash
-# Create bash-specific configuration
-touch configs/shell/common/bash_my-feature.sh
+source ~/.bashrc    # oder ~/.zshrc
 ```
 
-**Zsh Only:**
+### Eigene Funktionen erstellen
+
+Skripte in `functions/` werden zu global verfügbaren Befehlen:
 
 ```bash
-# Create zsh-specific configuration
-touch configs/shell/common/zsh_my-feature.sh
-```
-
-**Apply Changes:**
-
-```bash
-source ~/.bashrc    # or ~/.zshrc
-```
-
-### Creating Custom Functions
-
-Custom scripts in `functions/` become globally available commands:
-
-**Example:**
-
-```bash
-# Create a new function
+# Neues Skript erstellen
 cat > functions/backup-db.sh << 'EOF'
 #!/bin/bash
-echo "Backing up database..."
-# Your backup logic here
+echo "Datenbank wird gesichert..."
+# Backup-Logik hier
 EOF
 
-# Regenerate aliases
+# Aliase neu generieren und Shell laden
 lu-functions
+source ~/.bashrc    # oder ~/.zshrc
 
-# Reload shell
-source ~/.bashrc    # or ~/.zshrc
-
-# Now available as command (without .sh)
+# Jetzt als Befehl verfügbar (ohne .sh)
 backup-db
 ```
 
-**How it works:**
+**So funktioniert es:**
+- `functions/init.sh` macht alle `*.sh` Dateien ausführbar
+- Generiert automatisch ein Alias pro Skript (ohne `.sh`-Endung)
+- Aliase werden in `configs/shell/common/functions_aliases.sh` gespeichert
 
-- `functions/init.sh` makes all `*.sh` files executable
-- Auto-generates alias for each script (minus `.sh` extension)
-- Aliases stored in `configs/shell/common/functions_aliases.sh`
-- Scripts can be run from anywhere in the system
+### Anwendungs-Setup hinzufügen
 
-### Adding Application Setups
-
-Application-specific configurations go in `configs/applications/`:
-
-**Example:**
+Anwendungsspezifische Konfigurationen in `configs/applications/` ablegen:
 
 ```bash
-# Create application setup script
-cat > configs/applications/setup_myapp.sh << 'EOF'
-#!/bin/bash
-
-print_status "Setting up MyApp..."
-
-# Your setup logic here
-# - Create config files
-# - Symlink configurations
-# - Install plugins
-# - etc.
-
-print_status "MyApp setup complete!"
-EOF
-
-# Run configs initialization
-lu-configs
+# Setup-Skript erstellen (muss mit setup_ beginnen)
+configs/applications/setup_meine-app.sh
 ```
 
-**Auto-discovery:**
+Alle `setup_*.sh` Dateien werden automatisch von `configs/init.sh` erkannt und ausgeführt. Verwende `print_status`, `print_warning` und `print_error` für einheitliche Ausgaben. Siehe `configs/applications/setup_vim.sh` als Referenz.
 
-- All `setup_*.sh` files are automatically found and executed
-- Use `print_status`, `print_warning`, `print_error` for consistent output
-- Check `configs/applications/setup_vim.sh` for a complete example
+### Neue Kategorie erstellen
 
-### Creating New Categories
-
-Add completely new initialization categories:
-
-**Example:**
+Ein neues Verzeichnis mit `init.sh` erstellen — `setup.sh` findet und führt es automatisch aus:
 
 ```bash
-# Create new category directory
-mkdir -p ~/linuxutils/cloud-tools
-
-# Create initialization script
-cat > ~/linuxutils/cloud-tools/init.sh << 'EOF'
-#!/bin/bash
-
-print_status "Setting up cloud tools..."
-
-# Install AWS CLI
-# Install Azure CLI
-# Install GCloud SDK
-# Configure credentials
-# etc.
-
-print_status "Cloud tools setup complete!"
-EOF
-
-# Make executable
-chmod +x ~/linuxutils/cloud-tools/init.sh
-
-# Run full setup (auto-discovers new category)
-cd ~/linuxutils
-./setup.sh
+mkdir ~/linuxutils/cloud-tools
+# cloud-tools/init.sh erstellen mit Setup-Logik
 ```
 
-**Note:** To control execution order, edit `SETUP_ORDER` array in `setup.sh`:
+Die Ausführungsreihenfolge kann über `SETUP_ORDER` in `setup.sh` gesteuert werden.
 
-```bash
-SETUP_ORDER=("dependencies" "configs" "cloud-tools")
-```
-
-## Configuration Details
+## Konfigurationsdetails
 
 ### Oh My Zsh Integration
 
-When Oh My Zsh is installed, the system:
+Wenn Oh My Zsh installiert ist, durchläuft `zshrc.sh` folgende Schritte:
 
-1. **Initializes Oh My Zsh first** (with empty theme)
-2. **Sources Homebrew environment** for package availability
-3. **Initializes oh-my-posh** (overrides Oh My Zsh prompt)
-4. **Sources all common configs** (see Shell Configuration Chain)
-5. **Unaliases `g`** to prevent conflict with `g-ls` (git alias from OMZ)
+1. Oh My Zsh initialisieren (mit leerem Theme, um Konflikte zu vermeiden)
+2. Homebrew-Umgebung laden (für Paketverfügbarkeit)
+3. `oh-my-posh` initialisieren (überschreibt Oh My Zsh Prompt)
+4. Alle gemeinsamen Configs laden
+5. `g`-Alias entfernen (verhindert Konflikt mit `g-ls` — das `g`-Alias stammt vom Oh My Zsh git-Plugin)
 
-**Active Plugins:**
+### SDKMAN-Platzierung
 
-- `git` - Git aliases and functions
-- `colorize` - Syntax highlighting for files
-- `colored-man-pages` - Colorful manual pages
-- `compleat` - Enhanced completions
-- `emoji` - Emoji support
-- `ssh` - SSH helper functions
-- `you-should-use` - Alias usage reminders
-- `zsh-autosuggestions` - Fish-like suggestions
-- `zsh-syntax-highlighting` - Command syntax highlighting
-- `fast-syntax-highlighting` - Alternative faster highlighting
+SDKMAN-Exports **müssen** am Ende der Shell-Konfigurationsdateien stehen. SDKMAN modifiziert PATH und andere Variablen, die bei zu früher Ladung andere Tools stören können.
 
-### SDKMAN Placement
+`configs/init.sh` handhabt dies automatisch:
+1. Erkennt vorhandene SDKMAN-Zeilen
+2. Entfernt sie temporär
+3. Fügt die eigene Config-Sourcing-Zeile hinzu
+4. Setzt SDKMAN-Zeilen am Ende wieder ein
 
-**Critical Rule:** SDKMAN initialization must be at the end of shell configs.
-
-**Why?** SDKMAN modifies PATH and other variables that can interfere with other tools if loaded too early.
-
-**How it's handled:**
-
-- `configs/init.sh` automatically detects existing SDKMAN lines
-- Removes them temporarily during configuration
-- Adds custom config sourcing
-- Re-adds SDKMAN lines at the very end
-
-**Manual Verification:**
+**Überprüfung:**
 
 ```bash
-# Check that SDKMAN is at the end
-tail ~/.bashrc    # or ~/.zshrc
+tail ~/.bashrc    # oder ~/.zshrc
 
-# Should see these lines at the bottom:
+# Sollte am Ende zeigen:
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 ```
 
-### Editor Preference Order
+### Editor-Präferenz
 
-The system detects and configures editors in this priority:
+Das System erkennt und konfiguriert automatisch den bevorzugten Editor:
 
-1. **Neovim** (`nvim`) - Preferred if available
-2. **Vim** (`vim`) - Fallback option
-3. **Vi** (`vi`) - Last resort
+**Erkennungsreihenfolge:** `nvim` → `vim` → `vi`
 
-**Environment Variables:**
+**Gesetzte Umgebungsvariablen:**
 
-```bash
-echo $EDITOR            # nvim, vim, or vi
-echo $VISUAL            # Same as $EDITOR
-echo $PREFERRED_EDITOR  # Custom variable for scripts
-```
+| Variable | Beschreibung |
+|----------|-------------|
+| `$EDITOR` | Wird von Git, Cron, etc. verwendet |
+| `$VISUAL` | Wird von einigen Anwendungen verwendet |
+| `$PREFERRED_EDITOR` | Eigene Variable für Skripte |
 
-**Where it's used:**
+**Wo es verwendet wird:**
+- `v`-Alias in `aliases.sh`
+- FZF-Dateiöffnung (`Ctrl+F`) in `fzf.sh`
+- Fuzzygrep in `fuzzygrep.sh`
+- Eigene Skripte können `$PREFERRED_EDITOR` nutzen
 
-- `v` alias in `configs/shell/common/aliases.sh`
-- FZF file opening in `configs/shell/common/fzf.sh`
-- Fuzzygrep in `configs/shell/common/fuzzygrep.sh`
-- Any custom scripts can use `$PREFERRED_EDITOR`
+## Fehlerbehebung
 
-### File Locations
-
-**Configuration Files:**
-
-```
-~/.bashrc                    # Modified to source bashrc.sh
-~/.zshrc                     # Replaced/modified to source zshrc.sh
-~/.vimrc                     # Symlinked to configs/applications/vim/vimrc
-```
-
-**LinuxUtils Locations:**
-
-```
-~/linuxutils/                                  # Main directory
-├── setup.sh                                   # Main setup script
-├── dependencies/init.sh                       # Package installation
-├── configs/init.sh                            # Configuration setup
-├── configs/shell/bashrc.sh                    # Bash configuration
-├── configs/shell/zshrc.sh                     # Zsh configuration
-├── configs/shell/common/                      # Shared shell configs
-│   ├── aliases.sh                            # Common aliases
-│   ├── editor.sh                             # Editor detection
-│   ├── fzf.sh                                # FZF configuration
-│   ├── fuzzygrep.sh                          # Fuzzy grep function
-│   ├── ssh_fzf.sh                            # SSH with FZF
-│   ├── fapt.sh                               # APT package browser
-│   ├── ssh-agent-loader.sh                   # SSH agent management
-│   ├── neofetch.sh                           # System info display
-│   ├── functions_aliases.sh                  # Auto-generated aliases
-│   ├── bash_*.sh                             # Bash-specific configs
-│   └── zsh_*.sh                              # Zsh-specific configs
-├── configs/shell/ohmyposh/custom-zash.omp.json  # Oh-my-posh theme
-├── configs/applications/                      # Application setups
-│   ├── setup_vim.sh                          # Vim setup script
-│   └── vim/                                  # Vim configuration
-│       ├── vimrc                             # Vim config file
-│       └── plugins.vim                       # Vim plugins
-└── functions/                                 # Custom functions directory
-    ├── init.sh                               # Functions initialization
-    └── *.sh                                  # Custom function scripts
-```
-
-**Oh My Zsh:**
-
-```
-~/.oh-my-zsh/                # Oh My Zsh installation
-~/.oh-my-zsh/custom/plugins/ # Custom OMZ plugins
-```
-
-**Development Tools:**
-
-```
-~/.nvm/                      # Node Version Manager
-~/.sdkman/                   # SDKMAN installation
-/home/linuxbrew/.linuxbrew/  # Homebrew installation
-```
-
-## Troubleshooting
-
-**Shell configuration not loading:**
+**Shell-Konfiguration lädt nicht:**
 
 ```bash
-# Check if linuxutils is sourced in rc file
-grep "linuxutils" ~/.bashrc    # or ~/.zshrc
+# Prüfen ob linuxutils in der RC-Datei eingetragen ist
+grep "linuxutils" ~/.bashrc    # oder ~/.zshrc
 
-# If missing, re-run configs
+# Falls nicht, Configs neu einrichten
 lu-configs
-source ~/.bashrc    # or ~/.zshrc
+source ~/.bashrc    # oder ~/.zshrc
 ```
 
-**FZF not working:**
+**FZF funktioniert nicht:**
 
 ```bash
-# Check if FZF is installed
-fzf --version
-
-# Reinstall via dependencies
-lu-dependencies
-
-# Or install directly
-brew install fzf
+fzf --version           # Installation prüfen
+brew install fzf        # Direkt installieren
+# oder: lu-dependencies # Alles neu installieren
 ```
 
-**Custom function not available:**
+**Eigene Funktion nicht verfügbar:**
 
 ```bash
-# Check if script exists and is executable
-ls -la ~/linuxutils/functions/
-
-# Regenerate aliases
-lu-functions
-source ~/.bashrc    # or ~/.zshrc
+ls -la ~/linuxutils/functions/    # Skript vorhanden und ausführbar?
+lu-functions                       # Aliase neu generieren
+source ~/.bashrc                   # Shell neu laden
 ```
 
-**Vim plugins not installed:**
+**Vim-Plugins nicht installiert:**
 
 ```bash
-# Open vim and manually install
-vim +PlugInstall +qall
-
-# Or re-run configs
-lu-configs
+vim +PlugInstall +qall    # Plugins manuell installieren
+# oder: lu-configs        # Konfiguration neu einrichten
 ```
 
-**SDKMAN not working:**
+**SDKMAN funktioniert nicht:**
 
 ```bash
-# Check if SDKMAN is at end of rc file
-tail ~/.bashrc    # or ~/.zshrc
-
-# If not, re-run configs (handles SDKMAN placement)
-lu-configs
-source ~/.bashrc    # or ~/.zshrc
+tail ~/.bashrc    # SDKMAN am Ende der Datei?
+lu-configs        # Konfiguration neu einrichten (handhabt Platzierung)
+source ~/.bashrc
 ```
 
-**Oh My Zsh conflicts:**
+**Oh My Zsh Konflikte:**
 
 ```bash
-# The system handles OMZ integration automatically
-# If issues persist, backup and remove .zshrc
+# System handhabt OMZ-Integration automatisch
+# Falls Probleme bestehen:
 mv ~/.zshrc ~/.zshrc.backup
 lu-configs
 ```
 
-**Neovim LazyVim issues:**
+**Neovim/LazyVim Probleme:**
 
 ```bash
-# Check if Neovim is installed
-nvim --version
+nvim --version                    # Neovim installiert?
 
-# Reinstall LazyVim
+# LazyVim komplett neu installieren
 rm -rf ~/.config/nvim
 rm -rf ~/.local/share/nvim
 lu-dependencies --nvim
-
-# Or install manually
-./setup.sh --nvim
 ```
 
-**PATH issues after setup:**
+**PATH-Probleme nach Setup:**
 
 ```bash
-# Ensure Homebrew is in PATH
+# Homebrew-PATH sicherstellen
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-# Check PATH
 echo $PATH
 
-# Restart terminal to apply all changes
+# Terminal komplett neustarten für alle Änderungen
 ```
 
-**SSH agent not loading keys:**
+**SSH-Agent lädt keine Schlüssel:**
 
 ```bash
-# Check if ssh-agent is running
-ps aux | grep ssh-agent
-
-# Check loaded keys
-ssh-add -l
-
-# Manually reload
-source ~/linuxutils/configs/shell/common/ssh-agent-loader.sh
+ps aux | grep ssh-agent                                     # Agent läuft?
+ssh-add -l                                                  # Geladene Schlüssel prüfen
+source ~/linuxutils/configs/shell/common/ssh-agent-loader.sh  # Manuell neu laden
 ```
 
-**Package installation fails:**
+**Paketinstallation schlägt fehl:**
 
 ```bash
-# Update package lists first
-sudo apt update
-
-# Check for held packages
-sudo apt-mark showhold
-
-# Try installing package manually to see error
-sudo apt install <package-name>
+sudo apt update                  # Paketlisten aktualisieren
+sudo apt-mark showhold           # Gehaltene Pakete prüfen
+sudo apt install <paketname>     # Manuell installieren für Fehlerdetails
 ```
 
-## Contributing
+## Mitwirken
 
-Contributions are welcome! Here's how you can help:
+Beiträge sind willkommen! So kannst du helfen:
 
-**Adding Features:**
+**Neue Features hinzufügen:**
 
-1. Fork the repository
-2. Create a feature branch
-3. Add your feature following existing patterns:
-   - New packages → Edit `dependencies/*.sh`
-   - New shell configs → Add to `configs/shell/common/`
-   - New utilities → Add to `functions/`
-   - New app setup → Add to `configs/applications/`
-4. Test thoroughly on clean Ubuntu/WSL instance
-5. Submit pull request with clear description
+1. Repository forken
+2. Feature-Branch erstellen
+3. Feature nach bestehenden Patterns implementieren:
+   - Neue Pakete → `dependencies/*.sh` bearbeiten
+   - Neue Shell-Configs → `configs/shell/common/` hinzufügen
+   - Neue Utilities → `functions/` hinzufügen
+   - Neues App-Setup → `configs/applications/` hinzufügen
+4. Gründlich auf einer sauberen Ubuntu/WSL-Instanz testen
+5. Pull Request mit klarer Beschreibung einreichen
 
-**Reporting Issues:**
+**Wichtige Konventionen:**
 
-- Use GitHub issues
-- Include: OS version, shell type, error messages
-- Describe steps to reproduce
+- Skripte müssen **idempotent** sein (sicher mehrfach ausführbar)
+- `print_status`, `print_warning`, `print_error` für Ausgaben verwenden
+- Shell-Konfigurationen in **Bash und Zsh** testen
+- SDKMAN-Exports müssen am **Ende** der Shell-Dateien bleiben
+- README in **beiden Sprachen** (DE + EN) aktualisieren
 
-**Best Practices:**
+**Fehler melden:**
 
-- Keep scripts idempotent (safe to run multiple times)
-- Use `print_status`, `print_warning`, `print_error` for output
-- Test in both Bash and Zsh if adding shell configs
-- Document new features in README
-- Follow existing code style
+- GitHub Issues verwenden
+- Angeben: OS-Version, Shell-Typ, Fehlermeldungen
+- Schritte zur Reproduktion beschreiben
 
 ---
 
-**Note:** This project is tailored for Ubuntu/WSL environments. Some features may require adaptation for other Linux distributions.
+**Hinweis:** Dieses Projekt ist auf Ubuntu/WSL-Umgebungen zugeschnitten. Einige Features erfordern möglicherweise Anpassungen für andere Linux-Distributionen.
