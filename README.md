@@ -49,7 +49,7 @@ LinuxUtils automatisiert die Installation und Konfiguration von Entwicklungswerk
 
 ```bash
 # Repository klonen
-git clone <repo-url> ~/linuxutils
+git clone https://gitlab.so.ch/solerbus/linuxutils.git ~/linuxutils
 cd ~/linuxutils
 
 # Setup-Skript ausführbar machen (falls nötig)
@@ -118,74 +118,74 @@ echo $EDITOR        # Sollte nvim oder vim zeigen
 
 **Setup & Wartung:**
 
-| Alias | Befehl | Beschreibung |
-|-------|--------|-------------|
-| `sau` | `apt update && upgrade + snap refresh + brew upgrade` | Alle Pakete aktualisieren, Shell neustarten |
-| `lu-dependencies` | `source ~/linuxutils/dependencies/init.sh` | Abhängigkeiten neu installieren |
-| `lu-dependencies --nvim` | — | Mit Neovim-Installation |
-| `lu-configs` | `source ~/linuxutils/configs/init.sh` | Shell-Konfiguration neu einrichten |
-| `lu-functions` | `source ~/linuxutils/functions/init.sh` | Funktions-Aliase neu generieren |
+| Alias                    | Befehl                                                | Beschreibung                                |
+| ------------------------ | ----------------------------------------------------- | ------------------------------------------- |
+| `sau`                    | `apt update && upgrade + snap refresh + brew upgrade` | Alle Pakete aktualisieren, Shell neustarten |
+| `lu-dependencies`        | `source ~/linuxutils/dependencies/init.sh`            | Abhängigkeiten neu installieren             |
+| `lu-dependencies --nvim` | —                                                     | Mit Neovim-Installation                     |
+| `lu-configs`             | `source ~/linuxutils/configs/init.sh`                 | Shell-Konfiguration neu einrichten          |
+| `lu-functions`           | `source ~/linuxutils/functions/init.sh`               | Funktions-Aliase neu generieren             |
 
 **Navigation:**
 
-| Alias | Befehl | Beschreibung |
-|-------|--------|-------------|
-| `..` | `cd ..` | Ein Verzeichnis nach oben |
-| `ls` | `g --icon --sort=name` | Dateien mit Icons auflisten |
-| `ll` | `g --icon --long --sort=name --sh` | Ausführliche Liste mit Icons |
-| `la` | `ls -A` | Alle Dateien inkl. versteckte |
-| `cls` | `clear` | Bildschirm löschen |
+| Alias | Befehl                             | Beschreibung                  |
+| ----- | ---------------------------------- | ----------------------------- |
+| `..`  | `cd ..`                            | Ein Verzeichnis nach oben     |
+| `ls`  | `g --icon --sort=name`             | Dateien mit Icons auflisten   |
+| `ll`  | `g --icon --long --sort=name --sh` | Ausführliche Liste mit Icons  |
+| `la`  | `ls -A`                            | Alle Dateien inkl. versteckte |
+| `cls` | `clear`                            | Bildschirm löschen            |
 
 **Editor:**
 
-| Alias | Befehl | Beschreibung |
-|-------|--------|-------------|
-| `v` | `nvim` oder `vim` | Bevorzugten Editor öffnen (auto-erkannt) |
+| Alias | Befehl            | Beschreibung                             |
+| ----- | ----------------- | ---------------------------------------- |
+| `v`   | `nvim` oder `vim` | Bevorzugten Editor öffnen (auto-erkannt) |
 
 **Git:**
 
-| Alias | Befehl | Beschreibung |
-|-------|--------|-------------|
-| `gs` | `git status` | Git-Status anzeigen |
-| `ga` | `git add` | Dateien stagen |
-| `lg` | `lazygit` | Terminal-UI für Git |
+| Alias | Befehl       | Beschreibung        |
+| ----- | ------------ | ------------------- |
+| `gs`  | `git status` | Git-Status anzeigen |
+| `ga`  | `git add`    | Dateien stagen      |
+| `lg`  | `lazygit`    | Terminal-UI für Git |
 
 **Suche:**
 
-| Alias | Befehl | Beschreibung |
-|-------|--------|-------------|
-| `f` | `fuzzygrep` | Interaktive Textsuche mit FZF (siehe [FZF-Werkzeuge](#fzf-werkzeuge)) |
+| Alias | Befehl      | Beschreibung                                                          |
+| ----- | ----------- | --------------------------------------------------------------------- |
+| `f`   | `fuzzygrep` | Interaktive Textsuche mit FZF (siehe [FZF-Werkzeuge](#fzf-werkzeuge)) |
 
 **Pakete:**
 
-| Alias | Befehl | Beschreibung |
-|-------|--------|-------------|
-| `fapt` / `apt-search` | — | Interaktiver APT-Paketbrowser (siehe [FZF-Werkzeuge](#fzf-werkzeuge)) |
+| Alias                 | Befehl | Beschreibung                                                          |
+| --------------------- | ------ | --------------------------------------------------------------------- |
+| `fapt` / `apt-search` | —      | Interaktiver APT-Paketbrowser (siehe [FZF-Werkzeuge](#fzf-werkzeuge)) |
 
 **Netzwerk:**
 
-| Alias | Befehl | Beschreibung |
-|-------|--------|-------------|
+| Alias          | Befehl                             | Beschreibung                   |
+| -------------- | ---------------------------------- | ------------------------------ |
 | `unset-proxys` | `unset HTTP_PROXY HTTPS_PROXY ...` | Alle Proxy-Variablen entfernen |
 
 **Shell:**
 
-| Alias | Befehl | Beschreibung |
-|-------|--------|-------------|
-| `change-my-shell` | — | Zwischen Bash und Zsh wechseln |
+| Alias             | Befehl | Beschreibung                   |
+| ----------------- | ------ | ------------------------------ |
+| `change-my-shell` | —      | Zwischen Bash und Zsh wechseln |
 
 ### Tastenkürzel
 
 Alle FZF-Tastenkürzel auf einen Blick:
 
-| Taste | Funktion | Beschreibung |
-|-------|----------|-------------|
-| `Ctrl+T` | Pfad durchsuchen | Datei suchen und Pfad an Cursor-Position einfügen |
-| `Ctrl+R` | History durchsuchen | Befehlsverlauf mit Vorschau durchsuchen |
-| `Alt+C` | Verzeichniswechsel | Verzeichnis suchen und per `cd` wechseln |
-| `Ctrl+F` | Datei bearbeiten | Datei suchen und in vim/nvim öffnen |
-| `Ctrl+/` | Vorschau umschalten | Vorschaufenster ein-/ausblenden |
-| `Alt+S` | SSH-Hostauswahl | FZF-basierte SSH-Verbindung starten |
+| Taste    | Funktion            | Beschreibung                                      |
+| -------- | ------------------- | ------------------------------------------------- |
+| `Ctrl+T` | Pfad durchsuchen    | Datei suchen und Pfad an Cursor-Position einfügen |
+| `Ctrl+R` | History durchsuchen | Befehlsverlauf mit Vorschau durchsuchen           |
+| `Alt+C`  | Verzeichniswechsel  | Verzeichnis suchen und per `cd` wechseln          |
+| `Ctrl+F` | Datei bearbeiten    | Datei suchen und in vim/nvim öffnen               |
+| `Ctrl+/` | Vorschau umschalten | Vorschaufenster ein-/ausblenden                   |
+| `Alt+S`  | SSH-Hostauswahl     | FZF-basierte SSH-Verbindung starten               |
 
 ### FZF-Werkzeuge
 
@@ -216,6 +216,7 @@ apt-search          # Gleiche Funktion
 ```
 
 **Vorschau zeigt:**
+
 - Paketname und Version
 - Installationsstatus (farbcodiert)
 - Beschreibung, Kategorie, Maintainer und Homepage
@@ -233,6 +234,7 @@ ssh user@host       # Traditionelles SSH funktioniert weiterhin
 ```
 
 **Funktionsweise:**
+
 - Liest Hosts aus `~/.ssh/config` (ohne Wildcards)
 - Fügt den gewählten Befehl zur Shell-History hinzu
 - Erhält TTY für interaktive Sitzungen
@@ -265,36 +267,36 @@ Angepasste Systemanzeige beim Shell-Start:
 
 ### Systempakete (APT)
 
-| Paket | Beschreibung |
-|-------|-------------|
-| `git` | Versionskontrollsystem |
-| `tree` | Verzeichnisbaum-Visualisierung |
-| `build-essential` | Kompilierungswerkzeuge (gcc, make, etc.) |
-| `zsh` | Z Shell — Moderne Shell-Alternative |
-| `neofetch` | Systeminformationsanzeige |
-| `cowsay` | ASCII-Art-Textgenerator |
-| `ansiweather` | Wetter im Terminal |
-| `zip` / `unzip` | Archiv-Utilities |
-| `tar` / `gzip` | Komprimierungswerkzeuge |
-| `htop` | Interaktiver Prozess-Viewer |
-| `btop` | Moderner Ressourcenmonitor |
-| `ripgrep` | Schnelles Textsuch-Tool (`rg`) |
-| `bat` | Moderner `cat`-Ersatz mit Syntax-Highlighting |
-| `gdu` | Schneller Speicherplatz-Analyzer |
-| `traceroute` | Netzwerk-Diagnosewerkzeug |
+| Paket             | Beschreibung                                  |
+| ----------------- | --------------------------------------------- |
+| `git`             | Versionskontrollsystem                        |
+| `tree`            | Verzeichnisbaum-Visualisierung                |
+| `build-essential` | Kompilierungswerkzeuge (gcc, make, etc.)      |
+| `zsh`             | Z Shell — Moderne Shell-Alternative           |
+| `neofetch`        | Systeminformationsanzeige                     |
+| `cowsay`          | ASCII-Art-Textgenerator                       |
+| `ansiweather`     | Wetter im Terminal                            |
+| `zip` / `unzip`   | Archiv-Utilities                              |
+| `tar` / `gzip`    | Komprimierungswerkzeuge                       |
+| `htop`            | Interaktiver Prozess-Viewer                   |
+| `btop`            | Moderner Ressourcenmonitor                    |
+| `ripgrep`         | Schnelles Textsuch-Tool (`rg`)                |
+| `bat`             | Moderner `cat`-Ersatz mit Syntax-Highlighting |
+| `gdu`             | Schneller Speicherplatz-Analyzer              |
+| `traceroute`      | Netzwerk-Diagnosewerkzeug                     |
 
 ### Homebrew-Pakete
 
-| Paket | Beschreibung |
-|-------|-------------|
-| `fzf` | Kommandozeilen-Fuzzy-Finder |
+| Paket        | Beschreibung                    |
+| ------------ | ------------------------------- |
+| `fzf`        | Kommandozeilen-Fuzzy-Finder     |
 | `oh-my-posh` | Cross-Shell Prompt-Theme-Engine |
-| `lazygit` | Terminal-UI für Git |
-| `lazydocker` | Terminal-UI für Docker |
-| `g-ls` | Moderner `ls`-Ersatz mit Icons |
-| `asciinema` | Terminal-Session-Recorder |
-| `agg` | Asciinema-GIF-Generator |
-| `snitch` | Netzwerkverkehr-Monitor |
+| `lazygit`    | Terminal-UI für Git             |
+| `lazydocker` | Terminal-UI für Docker          |
+| `g-ls`       | Moderner `ls`-Ersatz mit Icons  |
+| `asciinema`  | Terminal-Session-Recorder       |
+| `agg`        | Asciinema-GIF-Generator         |
+| `snitch`     | Netzwerkverkehr-Monitor         |
 
 ### Snap-Pakete
 
@@ -303,10 +305,12 @@ Angepasste Systemanzeige beim Shell-Start:
 ### Entwicklungswerkzeuge
 
 **Node.js** (via NVM)
+
 - Node.js Version 22 (LTS)
 - Automatisch als Standard konfiguriert
 
 **SDKMAN**
+
 - Java SDK Manager für JVM-Tools
 - `sdk install java` nach Setup ausführen, um Java zu installieren
 
@@ -314,17 +318,17 @@ Angepasste Systemanzeige beim Shell-Start:
 
 Folgende Plugins werden automatisch installiert und aktiviert (falls Zsh vorhanden):
 
-| Plugin | Beschreibung |
-|--------|-------------|
-| `git` | Git-Aliase und -Funktionen |
-| `colorize` | Syntax-Highlighting für Dateien |
-| `colored-man-pages` | Farbige Manpages |
-| `compleat` | Erweiterte Tab-Completion |
-| `emoji` | Emoji-Support im Terminal |
-| `ssh` | SSH-Hilfsfunktionen |
-| `you-should-use` | Erinnert an vorhandene Aliase |
-| `zsh-autosuggestions` | Fish-ähnliche Autovervollständigung |
-| `zsh-syntax-highlighting` | Syntax-Highlighting für Befehle |
+| Plugin                     | Beschreibung                               |
+| -------------------------- | ------------------------------------------ |
+| `git`                      | Git-Aliase und -Funktionen                 |
+| `colorize`                 | Syntax-Highlighting für Dateien            |
+| `colored-man-pages`        | Farbige Manpages                           |
+| `compleat`                 | Erweiterte Tab-Completion                  |
+| `emoji`                    | Emoji-Support im Terminal                  |
+| `ssh`                      | SSH-Hilfsfunktionen                        |
+| `you-should-use`           | Erinnert an vorhandene Aliase              |
+| `zsh-autosuggestions`      | Fish-ähnliche Autovervollständigung        |
+| `zsh-syntax-highlighting`  | Syntax-Highlighting für Befehle            |
 | `fast-syntax-highlighting` | Schnellere Syntax-Highlighting Alternative |
 
 ### Optional: Neovim + LazyVim
@@ -387,16 +391,19 @@ LinuxUtils verwendet ein hierarchisches Setup, orchestriert durch `setup.sh`:
 Beide Shells laden die gemeinsamen Konfigurationen aus `configs/shell/common/`:
 
 **Bash:**
+
 ```
 ~/.bashrc → configs/shell/bashrc.sh → common/*.sh → common/bash_*.sh
 ```
 
 **Zsh:**
+
 ```
 ~/.zshrc → configs/shell/zshrc.sh → Oh My Zsh → common/*.sh → common/zsh_*.sh
 ```
 
 **Wichtige Details:**
+
 - Dateien in `common/` werden von beiden Shells geladen (ausser mit `bash_` oder `zsh_` Präfix)
 - `zshrc.sh` ersetzt die Standard-Oh-My-Zsh `.zshrc`, behält aber SDKMAN-Konfiguration bei
 - Oh My Zsh wird mit leerem Theme initialisiert; `oh-my-posh` übernimmt den Prompt
@@ -524,6 +531,7 @@ backup-db
 ```
 
 **So funktioniert es:**
+
 - `functions/init.sh` macht alle `*.sh` Dateien ausführbar
 - Generiert automatisch ein Alias pro Skript (ohne `.sh`-Endung)
 - Aliase werden in `configs/shell/common/functions_aliases.sh` gespeichert
@@ -567,6 +575,7 @@ Wenn Oh My Zsh installiert ist, durchläuft `zshrc.sh` folgende Schritte:
 SDKMAN-Exports **müssen** am Ende der Shell-Konfigurationsdateien stehen. SDKMAN modifiziert PATH und andere Variablen, die bei zu früher Ladung andere Tools stören können.
 
 `configs/init.sh` handhabt dies automatisch:
+
 1. Erkennt vorhandene SDKMAN-Zeilen
 2. Entfernt sie temporär
 3. Fügt die eigene Config-Sourcing-Zeile hinzu
@@ -591,13 +600,14 @@ Das System erkennt und konfiguriert automatisch den bevorzugten Editor:
 
 **Gesetzte Umgebungsvariablen:**
 
-| Variable | Beschreibung |
-|----------|-------------|
-| `$EDITOR` | Wird von Git, Cron, etc. verwendet |
-| `$VISUAL` | Wird von einigen Anwendungen verwendet |
-| `$PREFERRED_EDITOR` | Eigene Variable für Skripte |
+| Variable            | Beschreibung                           |
+| ------------------- | -------------------------------------- |
+| `$EDITOR`           | Wird von Git, Cron, etc. verwendet     |
+| `$VISUAL`           | Wird von einigen Anwendungen verwendet |
+| `$PREFERRED_EDITOR` | Eigene Variable für Skripte            |
 
 **Wo es verwendet wird:**
+
 - `v`-Alias in `aliases.sh`
 - FZF-Dateiöffnung (`Ctrl+F`) in `fzf.sh`
 - Fuzzygrep in `fuzzygrep.sh`
