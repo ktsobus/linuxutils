@@ -431,6 +431,7 @@ Both shells load shared configurations from `configs/shell/common/`:
 │   │   │   ├── ssh_fzf.sh                     # SSH with FZF
 │   │   │   ├── fapt.sh                        # APT package browser
 │   │   │   ├── ssh-agent-loader.sh            # SSH agent management
+│   │   │   ├── ssh-agent-reload.sh            # ssh-reload / sshr: restart agent + pick keys
 │   │   │   ├── fastfetch.sh                   # System info display
 │   │   │   ├── functions_aliases.sh           # Auto-generated aliases
 │   │   │   ├── bash_*.sh                      # Bash-only configs
@@ -682,7 +683,21 @@ echo $PATH
 ```bash
 ps aux | grep ssh-agent                                     # Is the agent running?
 ssh-add -l                                                  # Check loaded keys
+ssh-reload                                                  # Restart agent + pick keys
 source ~/linuxutils/configs/shell/common/ssh-agent-loader.sh  # Manually reload
+```
+
+**Restarting the SSH agent (`ssh-reload` / `sshr`):**
+
+Empties the running agent, starts a fresh one and loads selected keys from `~/.ssh`.
+Encrypted keys are prompted for (3 attempts, empty input = skip); a passphrase that
+already worked is tried automatically on the remaining keys.
+
+```bash
+ssh-reload                       # pick keys interactively (fzf, TAB = multiple)
+sshr                             # short form
+ssh-reload -a                    # load all private keys from ~/.ssh
+ssh-reload ~/.ssh/id_gitlab      # load just this key
 ```
 
 **Package installation fails:**
