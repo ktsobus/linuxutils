@@ -6,7 +6,7 @@ APT_PACKAGES=(
     "tree"
     "build-essential"
     "zsh"
-    "neofetch"
+    "fastfetch"
     "cowsay"
     "ansiweather"
     "zip"

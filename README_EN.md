@@ -18,7 +18,7 @@ LinuxUtils automates the installation and configuration of development tools, sh
   - [Keyboard Shortcuts](#keyboard-shortcuts)
   - [FZF Tools](#fzf-tools)
   - [SSH Agent](#ssh-agent)
-  - [Neofetch](#neofetch)
+  - [Fastfetch](#fastfetch)
 - [What Gets Installed](#what-gets-installed)
   - [System Packages (APT)](#system-packages-apt)
   - [Homebrew Packages](#homebrew-packages)
@@ -252,14 +252,14 @@ Smart SSH key management on shell startup:
   - Individual prompt only for keys with different passwords
 - No duplicate key loading
 
-### Neofetch
+### Fastfetch
 
 Customized system information display on shell startup:
 
 - ASCII art with `cowsay` (Tux penguin)
 - Live weather for Solothurn, CH (via `ansiweather`)
 - Color-coded by shell: Zsh (purple), Bash (cyan), others (white)
-- Falls back to standard neofetch if dependencies are missing
+- Falls back to standard fastfetch if dependencies are missing
 
 ## What Gets Installed
 
@@ -271,7 +271,7 @@ Customized system information display on shell startup:
 | `tree` | Directory tree visualization |
 | `build-essential` | Compilation tools (gcc, make, etc.) |
 | `zsh` | Z Shell — Modern shell alternative |
-| `neofetch` | System information display |
+| `fastfetch` | System information display |
 | `cowsay` | ASCII art text generator |
 | `ansiweather` | Terminal weather display |
 | `zip` / `unzip` | Archive utilities |
@@ -431,7 +431,7 @@ Both shells load shared configurations from `configs/shell/common/`:
 │   │   │   ├── ssh_fzf.sh                     # SSH with FZF
 │   │   │   ├── fapt.sh                        # APT package browser
 │   │   │   ├── ssh-agent-loader.sh            # SSH agent management
-│   │   │   ├── neofetch.sh                    # System info display
+│   │   │   ├── fastfetch.sh                   # System info display
 │   │   │   ├── functions_aliases.sh           # Auto-generated aliases
 │   │   │   ├── bash_*.sh                      # Bash-only configs
 │   │   │   └── zsh_*.sh                       # Zsh-only configs

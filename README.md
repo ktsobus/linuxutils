@@ -18,7 +18,7 @@ LinuxUtils automatisiert die Installation und Konfiguration von Entwicklungswerk
   - [Tastenkürzel](#tastenkürzel)
   - [FZF-Werkzeuge](#fzf-werkzeuge)
   - [SSH-Agent](#ssh-agent)
-  - [Neofetch](#neofetch)
+  - [Fastfetch](#fastfetch)
 - [Was wird installiert](#was-wird-installiert)
   - [Systempakete (APT)](#systempakete-apt)
   - [Homebrew-Pakete](#homebrew-pakete)
@@ -254,14 +254,14 @@ Intelligentes SSH-Key-Management beim Shell-Start:
   - Individuelle Abfrage nur für Schlüssel mit abweichendem Passwort
 - Keine doppelte Schlüsselladung
 
-### Neofetch
+### Fastfetch
 
 Angepasste Systemanzeige beim Shell-Start:
 
 - ASCII-Art mit `cowsay` (Tux-Pinguin)
 - Live-Wetter für Solothurn, CH (via `ansiweather`)
 - Farbcodiert nach Shell: Zsh (Lila), Bash (Cyan), andere (Weiss)
-- Fallback auf Standard-Neofetch, falls Abhängigkeiten fehlen
+- Fallback auf Standard-Fastfetch, falls Abhängigkeiten fehlen
 
 ## Was wird installiert
 
@@ -273,7 +273,7 @@ Angepasste Systemanzeige beim Shell-Start:
 | `tree`            | Verzeichnisbaum-Visualisierung                |
 | `build-essential` | Kompilierungswerkzeuge (gcc, make, etc.)      |
 | `zsh`             | Z Shell — Moderne Shell-Alternative           |
-| `neofetch`        | Systeminformationsanzeige                     |
+| `fastfetch`       | Systeminformationsanzeige                     |
 | `cowsay`          | ASCII-Art-Textgenerator                       |
 | `ansiweather`     | Wetter im Terminal                            |
 | `zip` / `unzip`   | Archiv-Utilities                              |
@@ -438,7 +438,7 @@ Beide Shells laden die gemeinsamen Konfigurationen aus `configs/shell/common/`:
 │   │   │   ├── ssh_fzf.sh                     # SSH mit FZF
 │   │   │   ├── fapt.sh                        # APT-Paketbrowser
 │   │   │   ├── ssh-agent-loader.sh            # SSH-Agent-Management
-│   │   │   ├── neofetch.sh                    # Systeminfo-Anzeige
+│   │   │   ├── fastfetch.sh                   # Systeminfo-Anzeige
 │   │   │   ├── functions_aliases.sh           # Auto-generierte Aliase
 │   │   │   ├── bash_*.sh                      # Nur-Bash-Configs
 │   │   │   └── zsh_*.sh                       # Nur-Zsh-Configs

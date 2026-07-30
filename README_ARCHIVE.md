@@ -30,7 +30,7 @@ LinuxUtils is a comprehensive shell configuration and development environment se
   - [APT Package Browser (fapt)](#apt-package-browser-fapt)
   - [Smart Editor Detection](#smart-editor-detection)
   - [SSH Agent Loader](#ssh-agent-loader)
-  - [Custom Neofetch](#custom-neofetch)
+  - [Custom Fastfetch](#custom-fastfetch)
 - [Usage Guide](#usage-guide)
   - [Common Commands](#common-commands)
   - [Keyboard Shortcuts](#keyboard-shortcuts)
@@ -131,7 +131,7 @@ Core utilities and development tools:
 | `tree`            | Directory tree visualization                    |
 | `build-essential` | Compilation tools (gcc, make, etc.)             |
 | `zsh`             | Z Shell - Modern shell alternative              |
-| `neofetch`        | System information display                      |
+| `fastfetch`       | System information display                      |
 | `cowsay`          | ASCII art text generator                        |
 | `ansiweather`     | Terminal weather display                        |
 | `zip` / `unzip`   | Archive utilities                               |
@@ -268,7 +268,7 @@ setup.sh
               ├─→ fuzzygrep.sh (search function)
               ├─→ fapt.sh (APT browser)
               ├─→ functions_aliases.sh (auto-generated)
-              ├─→ neofetch.sh (startup display)
+              ├─→ fastfetch.sh (startup display)
               ├─→ ssh-agent-loader.sh (SSH key management)
               │
               └─→ Source all bash_*.sh files (bash-specific)
@@ -446,7 +446,7 @@ Intelligent SSH key management on shell startup:
 - Interactive only when necessary
 - Secure password handling (no echoing)
 
-### Custom Neofetch
+### Custom Fastfetch
 
 Enhanced system information display on shell startup:
 
@@ -459,7 +459,7 @@ Enhanced system information display on shell startup:
   - Bash: Cyan
   - Others: White
 - Only runs if all dependencies available
-- Falls back to standard neofetch
+- Falls back to standard fastfetch
 
 ## Usage Guide
 
@@ -962,7 +962,7 @@ echo $PREFERRED_EDITOR  # Custom variable for scripts
 │   ├── ssh_fzf.sh                            # SSH with FZF
 │   ├── fapt.sh                               # APT package browser
 │   ├── ssh-agent-loader.sh                   # SSH agent management
-│   ├── neofetch.sh                           # System info display
+│   ├── fastfetch.sh                           # System info display
 │   ├── functions_aliases.sh                  # Auto-generated aliases
 │   ├── bash_*.sh                             # Bash-specific configs
 │   └── zsh_*.sh                              # Zsh-specific configs

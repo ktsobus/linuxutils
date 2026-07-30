@@ -1,4 +1,4 @@
-if command -v neofetch >/dev/null 2>&1 &&
+if command -v fastfetch >/dev/null 2>&1 &&
   command -v ansiweather >/dev/null 2>&1 &&
   command -v cowsay >/dev/null 2>&1; then
 
@@ -16,11 +16,11 @@ if command -v neofetch >/dev/null 2>&1 &&
   RESET_COLOR=$'\033[0m'
 
   temp=$(ansiweather -l 'Solothurn, CH' -u metric | grep -oP '\-?\d+ °C')
-  neofetch --ascii "$(
+  fastfetch --logo-type data-raw --logo "$(
     echo "Solothurn: $temp" | cowsay -f tux -W 27 |
       sed "s/^/${PINGU_COLOR}/; s/$/${RESET_COLOR}/"
   )"
 
-elif command -v neofetch >/dev/null 2>&1; then
-  neofetch
+elif command -v fastfetch >/dev/null 2>&1; then
+  fastfetch
 fi
