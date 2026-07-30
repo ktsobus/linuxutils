@@ -255,3 +255,11 @@ EOF
 }
 
 alias sshr='ssh-reload'
+
+# Direkt ausgeführt statt gesourct: die Agent-Variablen würden mit dem Prozess
+# sterben. Deshalb explizit warnen statt still nichts zu bewirken.
+if [ -n "$BASH_VERSION" ] && [ "${BASH_SOURCE[0]}" = "$0" ]; then
+  echo "ssh-reload: bitte sourcen, nicht ausführen:" >&2
+  echo "  source ${BASH_SOURCE[0]}" >&2
+  exit 1
+fi
