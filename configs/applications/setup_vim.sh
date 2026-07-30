@@ -1,7 +1,7 @@
 #!/bin/bash
 # Setup script for Vim with vim-plug
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 
 print_status() {
     echo -e "\033[0;32m[INFO]\033[0m $1"

@@ -39,6 +39,14 @@ install_snap_packages() {
 }
 
 # Run the installation if script is executed directly
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+_lu_sourced=0
+if [ -n "${ZSH_VERSION:-}" ]; then
+    case "${ZSH_EVAL_CONTEXT:-}" in *:file*) _lu_sourced=1;; esac
+elif [ -n "${BASH_VERSION:-}" ]; then
+    [[ "${BASH_SOURCE[0]}" != "${0}" ]] && _lu_sourced=1
+fi
+
+# Run the installation only if this script is executed directly
+if [[ "$_lu_sourced" -eq 0 ]]; then
     install_snap_packages "${SNAP_PACKAGES[@]}"
 fi

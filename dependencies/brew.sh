@@ -10,6 +10,7 @@ BREW_PACKAGES=(
   "asciinema"
   "agg"
   "snitch"
+  "glow"
 )
 
 # Homebrew casks to install (GUI applications)
@@ -64,7 +65,15 @@ install_brew_casks() {
 }
 
 # Run the installation if script is executed directly
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+_lu_sourced=0
+if [ -n "${ZSH_VERSION:-}" ]; then
+    case "${ZSH_EVAL_CONTEXT:-}" in *:file*) _lu_sourced=1;; esac
+elif [ -n "${BASH_VERSION:-}" ]; then
+    [[ "${BASH_SOURCE[0]}" != "${0}" ]] && _lu_sourced=1
+fi
+
+# Run the installation only if this script is executed directly
+if [[ "$_lu_sourced" -eq 0 ]]; then
   if command -v brew &>/dev/null; then
     install_brew_packages "${BREW_PACKAGES[@]}"
     install_brew_casks "${BREW_CASKS[@]}"

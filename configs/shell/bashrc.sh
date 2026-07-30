@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get the directory where this script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 
 #eval brew
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"

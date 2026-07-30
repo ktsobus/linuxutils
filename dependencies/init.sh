@@ -1,38 +1,54 @@
 #!/bin/bash
 
+# Detect whether we are being sourced (e.g. via the `lu-dependencies` alias)
+# so that `exit` never kills the user's interactive shell.
+_lu_sourced=0
+if [ -n "${ZSH_VERSION:-}" ]; then
+    case "${ZSH_EVAL_CONTEXT:-}" in *:file*) _lu_sourced=1;; esac
+elif [ -n "${BASH_VERSION:-}" ]; then
+    [ "${BASH_SOURCE[0]}" != "${0}" ] && _lu_sourced=1
+fi
+
 # Parse command line arguments
 INSTALL_NVIM=false
+SHOW_HELP=false
 for arg in "$@"; do
     case $arg in
         -h|--help)
-            echo "Usage: $0 [OPTIONS]"
-            echo ""
-            echo "Dependencies initialization script - Installs and updates system dependencies"
-            echo ""
-            echo "OPTIONS:"
-            echo "  -h, --help    Show this help message"
-            echo "  --nvim        Install Neovim and LazyVim configuration"
-            echo ""
-            echo "This script performs the following operations:"
-            echo "  - Updates and upgrades APT packages"
-            echo "  - Installs packages from apt.sh and snap.sh"
-            echo "  - Installs/updates Oh My Zsh and plugins (if zsh is available)"
-            echo "  - Installs/updates NVM and Node.js 22"
-            echo "  - Installs/updates SDKMAN"
-            echo "  - Installs/updates Homebrew and packages from brew.sh"
-            echo "  - Optionally installs Neovim and LazyVim (with --nvim flag)"
-            echo ""
-            echo "EXAMPLES:"
-            echo "  $0                # Run dependencies setup without Neovim"
-            echo "  $0 --nvim         # Run dependencies setup and install Neovim + LazyVim"
-            exit 0
+            SHOW_HELP=true
             ;;
         --nvim)
             INSTALL_NVIM=true
-            shift
             ;;
     esac
 done
+
+if [[ "$SHOW_HELP" == "true" ]]; then
+    echo "Usage: $0 [OPTIONS]"
+    echo ""
+    echo "Dependencies initialization script - Installs and updates system dependencies"
+    echo ""
+    echo "OPTIONS:"
+    echo "  -h, --help    Show this help message"
+    echo "  --nvim        Install Neovim and LazyVim configuration"
+    echo ""
+    echo "This script performs the following operations:"
+    echo "  - Updates and upgrades APT packages"
+    echo "  - Installs packages from apt.sh and snap.sh"
+    echo "  - Installs/updates Oh My Zsh and plugins (if zsh is available)"
+    echo "  - Installs/updates NVM and Node.js 22"
+    echo "  - Installs/updates SDKMAN"
+    echo "  - Installs/updates Homebrew and packages from brew.sh"
+    echo "  - Optionally installs Neovim and LazyVim (with --nvim flag)"
+    echo ""
+    echo "EXAMPLES:"
+    echo "  $0                # Run dependencies setup without Neovim"
+    echo "  $0 --nvim         # Run dependencies setup and install Neovim + LazyVim"
+    if [[ "$_lu_sourced" -eq 1 ]]; then
+        return 0
+    fi
+    exit 0
+fi
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -54,7 +70,7 @@ print_error() {
 }
 
 # Get the directory where this script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 
 print_status "Starting system setup and dependency installation..."
 
