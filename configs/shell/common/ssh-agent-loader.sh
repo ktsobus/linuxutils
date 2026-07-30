@@ -1,115 +1,80 @@
-#!/bin/bash
-
 #!/usr/bin/env bash
+# wird von bash UND zsh gesourct -> alles in einer Funktion, damit nichts leakt
 
-# SSH-Agent starten, falls nicht aktiv
-if ! pgrep -u "$USER" ssh-agent >/dev/null; then
-  eval "$(ssh-agent -s)"
-else
-  export SSH_AGENT_PID=$(pgrep ssh-agent)
-  export SSH_AUTH_SOCK=$(find /tmp/ssh-* -name "agent.*" -print 2>/dev/null | head -n1)
-fi
+_ssh_agent_loader() {
+  [ -n "$ZSH_VERSION" ] && setopt local_options null_glob
 
-# Temporären Askpass-Helfer erstellen
-create_askpass() {
-  local pass="$1"
-  local script
-  umask 077 # Nur der aktuelle Benutzer darf die Datei lesen
-  script=$(mktemp)
-  cat >"$script" <<EOF
-#!/usr/bin/env bash
-echo '${pass//\'/\'\\\'\'}'
-EOF
-  chmod 700 "$script" # explizit, obwohl umask meist schon reicht
-  echo "$script"
-}
-
-# Prüfen, ob Key passwortgeschützt ist (ohne Passwortabfrage!)
-is_encrypted_key() {
-  local keyfile="$1"
-  ssh-keygen -y -P "" -f "$keyfile" >/dev/null 2>&1
-  [[ $? -ne 0 ]] # Rückgabe 0 = unverschlüsselt, ≠ 0 = passwortgeschützt
-}
-
-# Schlüssel in zwei Gruppen aufteilen
-unencrypted_keys=()
-encrypted_keys=()
-
-for key in ~/.ssh/id_*; do
-  if [[ -f "$key" && "$key" != *.pub ]]; then
-    fingerprint=$(ssh-keygen -lf "$key" | awk '{print $2}' 2>/dev/null)
-    if ssh-add -l 2>/dev/null | grep -q "$fingerprint"; then
-      continue # bereits im Agent
-    fi
-
-    if is_encrypted_key "$key"; then
-      encrypted_keys+=("$key")
-    else
-      unencrypted_keys+=("$key")
-    fi
+  # 1) Agent mit festem Socket-Pfad -> kein Raten in /tmp
+  export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-/tmp}/ssh-agent.${USER}.sock"
+  ssh-add -l >/dev/null 2>&1
+  if [ $? -eq 2 ]; then # 2 = kein Agent erreichbar
+    rm -f "$SSH_AUTH_SOCK"
+    eval "$(ssh-agent -a "$SSH_AUTH_SOCK" -s)" >/dev/null
   fi
-done
 
-#echo "En: $encrypted_keys"
-#echo "Un: $unencrypted_keys"
+  # 2) Askpass-Helfer: Passwort kommt aus der Umgebung, nicht aus der Datei
+  local askpass_helper
+  askpass_helper=$(mktemp) || return 1
+  cat >"$askpass_helper" <<'ASKPASS'
+#!/usr/bin/env bash
+printf '%s\n' "$SSH_PASSPHRASE"
+ASKPASS
+  chmod 700 "$askpass_helper"
 
-# Passwortlose Schlüssel direkt laden
-if [ ${#unencrypted_keys[@]} -gt 0 ]; then
-  ssh-add "${unencrypted_keys[@]}" >/dev/null 2>&1
-fi
+  _try_add() { # $1 = keyfile, $2 = passphrase
+    SSH_ASKPASS="$askpass_helper" SSH_ASKPASS_REQUIRE=force DISPLAY=:0 \
+      SSH_PASSPHRASE="$2" ssh-add "$1" >/dev/null 2>&1
+  }
 
-# Wenn keine verschlüsselten Schlüssel, Script beenden
-if [ ! ${#encrypted_keys[@]} -eq 0 ]; then
+  # 3) Keys einsammeln
+  local key fp loaded_list
+  local -a unencrypted encrypted failed
+  loaded_list=$(ssh-add -l 2>/dev/null)
 
-  # Erstes Passwort für alle verschlüsselten Schlüssel abfragen
-  echo -n "Passwort für ${#encrypted_keys[@]} Schlüssel: "
-  read -s common_pass
-  echo
-
-  askpass_script=$(create_askpass "$common_pass")
-
-  # Liste der Keys, die mit diesem Passwort nicht geladen wurden
-  failed_keys=()
-
-  for key in "${encrypted_keys[@]}"; do
-    (
-      export SSH_ASKPASS="$askpass_script"
-      export SSH_ASKPASS_REQUIRE=force
-      DISPLAY=: timeout 2 ssh-add "$key" >/dev/null 2>&1
-    )
-
-    fingerprint=$(ssh-keygen -lf "$key" 2>/dev/null | awk '{print $2}')
-    if ! ssh-add -l 2>/dev/null | grep -q "$fingerprint"; then
-      failed_keys+=("$key")
+  for key in "$HOME"/.ssh/id_*; do
+    [ -f "$key" ] || continue
+    case "$key" in *.pub) continue ;; esac
+    fp=$(ssh-keygen -lf "$key" 2>/dev/null | awk '{print $2}')
+    if [ -n "$fp" ] && printf '%s\n' "$loaded_list" | grep -qF "$fp"; then
+      continue # schon im Agent
+    fi
+    if ssh-keygen -y -P "" -f "$key" >/dev/null 2>&1; then
+      unencrypted+=("$key")
+    else
+      encrypted+=("$key")
     fi
   done
 
-  rm -f "$askpass_script"
+  [ ${#unencrypted[@]} -gt 0 ] && ssh-add "${unencrypted[@]}" >/dev/null 2>&1
 
-  # Nun für jeden nicht geladenen Key einzeln Passwort abfragen
-  for key in "${failed_keys[@]}"; do
-    while true; do
-      echo -n "Passwort für Schlüssel $key: "
-      read -s single_pass
-      echo
+  if [ ${#encrypted[@]} -gt 0 ]; then
+    local common_pass single_pass
+    printf 'Passwort für %d Schlüssel: ' "${#encrypted[@]}"
+    read -rs common_pass
+    echo
 
-      askpass_script=$(create_askpass "$single_pass")
-
-      (
-        export SSH_ASKPASS="$askpass_script"
-        export SSH_ASKPASS_REQUIRE=force
-        DISPLAY=: timeout 2 ssh-add "$key" >/dev/null 2>&1
-      )
-
-      rm -f "$askpass_script"
-
-      fingerprint=$(ssh-keygen -lf "$key" 2>/dev/null | awk '{print $2}')
-      if ssh-add -l 2>/dev/null | grep -q "$fingerprint"; then
-        echo "Schlüssel $key erfolgreich geladen."
-        break
-      else
-        echo "Falsches Passwort für $key, bitte erneut versuchen."
-      fi
+    for key in "${encrypted[@]}"; do
+      _try_add "$key" "$common_pass" || failed+=("$key")
     done
-  done
-fi
+
+    for key in "${failed[@]}"; do
+      while true; do
+        printf 'Passwort für %s (leer = überspringen): ' "$key"
+        read -rs single_pass
+        echo
+        [ -z "$single_pass" ] && break
+        if _try_add "$key" "$single_pass"; then
+          echo "Schlüssel $key geladen."
+          break
+        fi
+        echo "Falsches Passwort für $key, bitte erneut."
+      done
+    done
+  fi
+
+  rm -f "$askpass_helper"
+  unset -f _try_add
+}
+
+_ssh_agent_loader
+unset -f _ssh_agent_loader
