@@ -11,6 +11,7 @@ BREW_PACKAGES=(
   "agg"
   "snitch"
   "glow"
+  "witr"
 )
 
 # Homebrew casks to install (GUI applications)
@@ -67,9 +68,9 @@ install_brew_casks() {
 # Run the installation if script is executed directly
 _lu_sourced=0
 if [ -n "${ZSH_VERSION:-}" ]; then
-    case "${ZSH_EVAL_CONTEXT:-}" in *:file*) _lu_sourced=1;; esac
+  case "${ZSH_EVAL_CONTEXT:-}" in *:file*) _lu_sourced=1 ;; esac
 elif [ -n "${BASH_VERSION:-}" ]; then
-    [[ "${BASH_SOURCE[0]}" != "${0}" ]] && _lu_sourced=1
+  [[ "${BASH_SOURCE[0]}" != "${0}" ]] && _lu_sourced=1
 fi
 
 # Run the installation only if this script is executed directly
