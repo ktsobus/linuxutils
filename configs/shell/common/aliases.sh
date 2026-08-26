@@ -30,3 +30,6 @@ alias lg='lazygit'
 
 # network
 alias unset-proxys='unset HTTP_PROXY HTTPS_PROXY NO_PROXY http_proxy https_proxy no_proxy ALL_PROXY all_proxy'
+
+# ai
+alias claude='unset-proxys && claude'
