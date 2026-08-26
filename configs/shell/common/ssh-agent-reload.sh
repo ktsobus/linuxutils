@@ -187,7 +187,10 @@ ssh-reload() {
 
   while [ $# -gt 0 ]; do
     case "$1" in
-    -a | --all) all=true; shift ;;
+    -a | --all)
+      all=true
+      shift
+      ;;
     -h | --help)
       cat <<'USAGE'
 ssh-reload [-a] [KEYFILE...]
@@ -225,7 +228,10 @@ USAGE
   echo "Neuer SSH-Agent: $SSH_AUTH_SOCK (PID ${SSH_AGENT_PID:-?})"
 
   trap '_ssh_reload_cleanup; trap - INT TERM' INT TERM
-  _ssh_reload_mk_askpass || { trap - INT TERM; return 1; }
+  _ssh_reload_mk_askpass || {
+    trap - INT TERM
+    return 1
+  }
   _SSH_RELOAD_KNOWN_PASS=""
 
   while IFS= read -r key <&3; do
